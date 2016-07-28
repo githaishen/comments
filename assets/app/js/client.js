@@ -109,7 +109,7 @@
 			//this.scrollToBottom();
 			
 			//连接websocket后端服务器
-			this.socket = io.connect('ws://newdirect-comments.daoapp.io');
+			this.socket = io.connect('ws://haishen-comments.daoapp.io');
 			//this.socket = io.connect('ws://localhost:3000');
 			
 			//告诉服务器端有用户登录
