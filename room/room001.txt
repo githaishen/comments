@@ -1,2 +1,0 @@
-{"username":"wwww","comment":"你们好","times":"2016年7月29日中午12点27分"},
-{"username":"ggg","comment":"我来了","times":"2016年7月29日中午12点28分"},
