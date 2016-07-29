@@ -130,21 +130,20 @@ router.get('/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
-    var json=JSON.parse(fs.readFileSync('./list.json'));
-
-    //解析json文件内容，找到roomID对应的视频url
-    var vurl = '';
-    for(var i in json.video){
-        if(json.video[i].room == roomID){
-            vurl = json.video[i].url;
-        }
-    }
+    //var json=JSON.parse(fs.readFileSync('./list.json'));
+    //
+    ////解析json文件内容，找到roomID对应的视频url
+    //var vurl = '';
+    //for(var i in json.video){
+    //    if(json.video[i].room == roomID){
+    //        vurl = json.video[i].url;
+    //    }
+    //}
 
     // 渲染页面数据(见views/room.hbs)
-    res.render('room', {
+    res.render(roomID, {
         username:username,
-        userid:userid,
-        vurl:vurl
+        userid:userid
     });
 });
 
