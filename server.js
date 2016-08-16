@@ -68,7 +68,7 @@ io.on('connection', function(socket){
         io.to(roomID).emit('join', msg);
 
         // 后台日志显示
-        //console.log(obj.username + '加入了' + roomID+"房间");
+        console.log(obj.username + '加入了' + roomID+"房间");
     });
 
     socket.on('leave', function () {
@@ -96,7 +96,7 @@ io.on('connection', function(socket){
             //io.to(roomID).emit('leave', {onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj,roomCount:roomInfo[roomID].length});
             io.to(roomID).emit('leave', {user:obj,roomCount:roomInfo[roomID].length});
             socket.leave(roomID);//退出房间
-            //console.log(obj.username+'退出了'+roomID+'房间');
+            console.log(obj.username+'退出了'+roomID+'房间');
         }
     });
 
@@ -121,7 +121,7 @@ io.on('connection', function(socket){
         var REGEXP_QUOTE = /"/g;
         var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
         fs.appendFileSync('./room/'+roomID+'.txt','{"username":"'+obj.username+'","comment":"'+filterMsg+'","times":"'+curTime+'"},\n');
-        //console.log(obj.username+'说：'+filterMsg);
+        console.log(obj.username+'说：'+filterMsg);
     });
 });
 
@@ -130,20 +130,21 @@ router.get('/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
-    //var json=JSON.parse(fs.readFileSync('./list.json'));
-    //
-    ////解析json文件内容，找到roomID对应的视频url
-    //var vurl = '';
-    //for(var i in json.video){
-    //    if(json.video[i].room == roomID){
-    //        vurl = json.video[i].url;
-    //    }
-    //}
+    var json=JSON.parse(fs.readFileSync('./list.json'));
+
+    //解析json文件内容，找到roomID对应的视频url
+    var vurl = '';
+    for(var i in json.video){
+        if(json.video[i].room == roomID){
+            vurl = json.video[i].url;
+        }
+    }
 
     // 渲染页面数据(见views/room.hbs)
-    res.render(roomID, {
+    res.render("room", {
         username:username,
-        userid:userid
+        userid:userid,
+        vurl:vurl
     });
 });
 
@@ -154,6 +155,18 @@ router.get('/list', function (req, res) {
 
     // 渲染页面数据(见views/list.hbs)
     res.render('list', {
+        username:username,
+        userid:userid
+    });
+});
+
+router.get('/video', function (req, res) {
+
+    var username = req.query.username;
+    var userid = req.query.userid;
+
+    // 渲染页面数据(见views/video.hbs)
+    res.render('video', {
         username:username,
         userid:userid
     });
