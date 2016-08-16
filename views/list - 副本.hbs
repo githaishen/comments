@@ -5,24 +5,40 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <title>专家讲堂</title>
-    <link rel="stylesheet" href="/assets/app/css/style.css">
+    <link rel="stylesheet" href="/assets/agile/css/agile.layout.css">
+    <link rel="stylesheet" href="/assets/third/seedsui/plugin/seedsui/seedsui.min.css">
 </head>
 <body>
 <canvas id="canvas"></canvas>    <!--星空背景-->
 
 <div class="bar">
-    <p>名师风采</p>
+    <p></p>
 </div>
 
-<div class="box">
-    <ul>
-        <li>
-            <img src="/assets/app/img/2.pic_hd.jpg">
-            <p><span>郑重：</span>医学博士，教授，硕士生导师。四川大学华西医院主任医师，西部精神医学协会睡眠医学专委会副主任委员，西部精神医学协会物理诊疗医学专委会主任委员，科技部国家微创治疗产业技术创新战略联盟——盆腔空腔脏器微创专委会（筹备会）基础组组长。专业特长：生物精神病学与心身疾病，神经、精神疾病电生理诊断，经颅磁刺激治疗。发表论文60余篇（SCI收录论文7篇）；承担和参加部、省、国家级科研项目9项；主持开设临床神经电生理和经颅磁刺激诊疗国家级远程教育项目2项；主持开设四川大学研究生学位课程《临床神经电生理》；出版著作7部（其中1部主编，1部副主编）。</p>
-            <a class="button"  href="/video?username={{username}}&userid={{userid}}">>进入讲堂</a>
-        </li>
-    </ul>
+<div id="section_container">
+    <section id="index_section" class="active" data-role="section">
+        <header>
+            <h3>名师风采</h3>
+        </header>
+        <article data-role="article" id="index_article" class="active" style="top:44px;bottom:35px;">
+            <div class="scroller">
+                <details open>
+                    <ul class="list" id="message">
+                        <li id="room_1">
+                            <div class="justify-content">
+                                <img src="/assets/app/img/2.pic_hd.jpg">
+                                <small>郑重：医学博士，教授，硕士生导师。四川大学华西医院主任医师，西部精神医学协会睡眠医学专委会副主任委员，西部精神医学协会物理诊疗医学专委会主任委员，科技部国家微创治疗产业技术创新战略联盟——盆腔空腔脏器微创专委会（筹备会）基础组组长。专业特长：生物精神病学与心身疾病，神经、精神疾病电生理诊断，经颅磁刺激治疗。发表论文60余篇（SCI收录论文7篇）；承担和参加部、省、国家级科研项目9项；主持开设临床神经电生理和经颅磁刺激诊疗国家级远程教育项目2项；主持开设四川大学研究生学位课程《临床神经电生理》；出版著作7部（其中1部主编，1部副主编）。</small>
+                                <a class="button"  href="/video?username={{username}}&userid={{userid}}">>进入讲堂</a>
+                            </div>
+                        </li>
+                    </ul>
+                </details>
+            </div>
+        </article>
+    </section>
 </div>
+</div>
+
 
 <script>     <!--星空背景-->
 "use strict";

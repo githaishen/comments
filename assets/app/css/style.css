@@ -8,13 +8,13 @@ body{
 	 }
 .box{margin:20px 10px;}
 ul li{list-style:none}
-li{ width:640px;
+li{ width:80%;
 	margin:0 auto;
 	display:block;
 	padding:20px;
 	background-color:#FFF;
 	border:solid #0CF 2px;
-	font-size:24px;
+	font-size:18px;
 	-moz-border-radius:2em; -webkit-border-radius:2em; border-radius:2em;
 	-moz-box-shadow:2px 2px 20px #24AEE0; -webkit-box-shadow:2px 2px 20px #24AEE0; box-shadow:2px 2px 20px #24AEE0;
 	text-shadow:1px 1px 1px #333333;
@@ -65,7 +65,7 @@ li img{float:left;
 	-moz-border-radius:2em; -webkit-border-radius:2em; border-radius:2em;
 	margin-right:10px;
 	margin-bottom:10px;}
-li span{ font-size:36px; color:#06F; 
+li span{ font-size:28px; color:#06F;
 	}
 a{text-decoration:none;}
 a.button { float:right;
@@ -120,10 +120,9 @@ a.button { float:right;
   to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333; }
 }
 
-.bar{margin:10px auto;
-	width:640px;}
+.bar{margin:10px auto;}
 .bar p{color:#FFF;
-		font-size:36px;
+		font-size:24px;
 		letter-spacing:10px;
 		color: #ffffff;;
 		text-shadow: 0 0 5px #fff, 
@@ -136,17 +135,10 @@ a.button { float:right;
 		0 0 75px #FF9900;
 		}
 
-
-
-
-
 canvas{  
 		position: absolute;
 		//opacity: 0.5;
 		z-index:-1;
-		
-		 
-	
 }
 
 
