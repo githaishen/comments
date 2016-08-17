@@ -185,46 +185,45 @@ router.get('/wx', function (req, res) {
     var access_token = '';
     var openid = '';
     var nickname = '';
-    //request('http://oapi.evideocloud.com/b3/get_addr?uid=123454581&vid=016a8a7e5efd11e6af2506d96dcff49f',function(error,response,body){
-    //    if (!error && response.statusCode == 200) {
-    //        //console.log(body);
-    //        var jsondata = JSON.parse(body);
-    //        console.log(jsondata.result.title)
-    //    }
-    //});
+
     request('https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code',function(error,response,body) {
         if (!error && response.statusCode == 200) {
-            console.log(body);
-            var jsondata = JSON.parse(body);
-            access_token = jsondata.access_token;
-            openid = jsondata.openid;
+            //console.log(body);
+            var data = JSON.parse(body);
+            access_token = data.access_token;
+            openid = data.openid;
             console.log("openid=" + openid);
             console.log("access_token:"+access_token);
-            res.render('list', {
-                username:getNickname(openid,access_token),
-                userid:openid
-            });
-
+            renderList(access_token,openid,res);
         } else {
             console.log(response.statusCode);
+            res.render('index');
         }
     });
 
 });
 
-function getNickname(openid,access_token){
-    var nickname = '';
+function renderList(access_token,openid,res){
     request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
         if (!error && response.statusCode == 200) {
-            console.log(body);
             var data = JSON.parse(body);
-            nickname = data.nickname;
-            console.log("this nickname:"+nickname);
+            var nickname = data.nickname;
+            if(typeof(data.nickname) == "undefined") {
+                nickname = "游客"+genUid();
+            }
+            res.render('list', {
+                username:nickname,
+                userid:openid
+            });
         } else {
             console.log(response.statusCode);
+            res.render("index");
         }
     });
-    return nickname;
+}
+
+function genUid(){
+    return new Date().getTime()+""+Math.floor(Math.random()*899+100);
 }
 
 app.use('/', router);
