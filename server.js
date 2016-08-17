@@ -200,16 +200,14 @@ router.get('/wx', function (req, res) {
             openid = jsondata.openid;
             console.log("openid=" + openid);
             console.log("access_token:"+access_token);
-            nickname = getNickname(openid,access_token);
-            console.log("nickname:"+nickname);
+            res.render('list', {
+                username:getNickname(openid,access_token),
+                userid:openid
+            });
+
         } else {
             console.log(response.statusCode);
         }
-    });
-
-    res.render('list', {
-        username:nickname,
-        userid:openid
     });
 
 });
@@ -221,6 +219,7 @@ function getNickname(openid,access_token){
             console.log(body);
             var data = JSON.parse(body);
             nickname = data.nickname;
+            console.log("this nickname:"+nickname);
         } else {
             console.log(response.statusCode);
         }
