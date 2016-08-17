@@ -200,15 +200,8 @@ router.get('/wx', function (req, res) {
             openid = jsondata.openid;
             console.log("openid=" + openid);
             console.log("access_token:"+access_token);
-            request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
-                if (!error && response.statusCode == 200) {
-                    var jsondata = JSON.parse(body);
-                    console.log(jsondata.nickname);
-                    nickname = jsondata.nickname;
-                } else {
-                    console.log(response.statusCode);
-                }
-            });
+            nickname = getNickname(openid,access_token);
+            console.log("nickname:"+nickname);
         } else {
             console.log(response.statusCode);
         }
@@ -220,6 +213,19 @@ router.get('/wx', function (req, res) {
     });
 
 });
+
+function getNickname(openid,access_token){
+    var nickname = '';
+    request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
+        if (!error && response.statusCode == 200) {
+            var jsondata = JSON.parse(body);
+            nickname = jsondata.nickname;
+        } else {
+            console.log(response.statusCode);
+        }
+    });
+    return nickname;
+}
 
 app.use('/', router);
 
