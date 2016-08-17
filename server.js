@@ -204,7 +204,7 @@ router.get('/wx', function (req, res) {
         }
     });
 
-    request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,,function(error,response,body) {
+    request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
         if (!error && response.statusCode == 200) {
             var jsondata = JSON.parse(body);
             console.log(jsondata.nickname);
