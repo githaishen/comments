@@ -181,7 +181,7 @@ var request = require('request');
 //微信认证
 router.get('/wx', function (req, res) {
     var code = req.query.code;
-    console.log(code);
+    //console.log(code);
     var access_token = '';
     var openid = '';
     var nickname = '';
@@ -192,8 +192,8 @@ router.get('/wx', function (req, res) {
             var data = JSON.parse(body);
             access_token = data.access_token;
             openid = data.openid;
-            console.log("openid=" + openid);
-            console.log("access_token:"+access_token);
+            //console.log("openid=" + openid);
+            //console.log("access_token:"+access_token);
             renderList(access_token,openid,res);
         } else {
             console.log(response.statusCode);
