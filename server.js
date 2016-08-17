@@ -185,39 +185,34 @@ router.get('/wx', function (req, res) {
     var access_token = '';
     var openid = '';
     var nickname = '';
-    request.get(
-        {
-            url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code',
-            encoding:'utf8'
-        },function(error,response,body){
-            if(response.statusCode == 200){
-                console.log(body);
-                var jsondata = JSON.parse(body);
-                access_token = jsondata.access_token;
-                openid = jsondata.openid;
-                console.log("openid="+openid);
-            }else{
-                console.log(response.statusCode);
-                return
-            }
+    //request('http://oapi.evideocloud.com/b3/get_addr?uid=123454581&vid=016a8a7e5efd11e6af2506d96dcff49f',function(error,response,body){
+    //    if (!error && response.statusCode == 200) {
+    //        //console.log(body);
+    //        var jsondata = JSON.parse(body);
+    //        console.log(jsondata.result.title)
+    //    }
+    //});
+    request('https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code',function(error,response,body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body);
+            var jsondata = JSON.parse(body);
+            access_token = jsondata.access_token;
+            openid = jsondata.openid;
+            console.log("openid=" + openid);
+        } else {
+            console.log(response.statusCode);
         }
-    );
+    });
 
-    request.get(
-        {
-            url:'https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,
-            encoding:'utf8'
-        },function(error,response,body){
-            if(response.statusCode == 200){
-                var jsondata = JSON.parse(body);
-                console.log(jsondata.nickname);
-                nickname = jsondata.nickname;
-            }else{
-                console.log(response.statusCode);
-                return
-            }
+    request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,,function(error,response,body) {
+        if (!error && response.statusCode == 200) {
+            var jsondata = JSON.parse(body);
+            console.log(jsondata.nickname);
+            nickname = jsondata.nickname;
+        } else {
+            console.log(response.statusCode);
         }
-    );
+    });
 
     res.render('list', {
         username:nickname,
