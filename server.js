@@ -218,8 +218,9 @@ function getNickname(openid,access_token){
     var nickname = '';
     request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
         if (!error && response.statusCode == 200) {
-            var jsondata = JSON.parse(body);
-            nickname = jsondata.nickname;
+            console.log(body);
+            var jsondata2 = JSON.parse(body);
+            nickname = jsondata2.nickname;
         } else {
             console.log(response.statusCode);
         }
