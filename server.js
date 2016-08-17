@@ -191,9 +191,11 @@ router.get('/wx', function (req, res) {
             encoding:'utf8'
         },function(error,response,body){
             if(response.statusCode == 200){
-                console.log(body.openid);
-                access_token = body.access_token;
-                openid = body.openid;
+                console.log(body);
+                var jsondata = JSON.parse(body);
+                access_token = jsondata.access_token;
+                openid = jsondata.openid;
+                console.log("openid="+openid);
             }else{
                 console.log(response.statusCode);
                 return
@@ -207,8 +209,9 @@ router.get('/wx', function (req, res) {
             encoding:'utf8'
         },function(error,response,body){
             if(response.statusCode == 200){
-                console.log(body.nickname)
-                nickname = body.nickname;
+                var jsondata = JSON.parse(body);
+                console.log(jsondata.nickname);
+                nickname = jsondata.nickname;
             }else{
                 console.log(response.statusCode);
                 return
