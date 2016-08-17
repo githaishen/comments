@@ -199,16 +199,16 @@ router.get('/wx', function (req, res) {
             access_token = jsondata.access_token;
             openid = jsondata.openid;
             console.log("openid=" + openid);
-        } else {
-            console.log(response.statusCode);
-        }
-    });
-
-    request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
-        if (!error && response.statusCode == 200) {
-            var jsondata = JSON.parse(body);
-            console.log(jsondata.nickname);
-            nickname = jsondata.nickname;
+            console.log("access_token:"+access_token);
+            request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
+                if (!error && response.statusCode == 200) {
+                    var jsondata = JSON.parse(body);
+                    console.log(jsondata.nickname);
+                    nickname = jsondata.nickname;
+                } else {
+                    console.log(response.statusCode);
+                }
+            });
         } else {
             console.log(response.statusCode);
         }
