@@ -187,7 +187,7 @@ router.get('/wx', function (req, res) {
     var nickname = '';
     request.get(
         {
-            url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code'
+            url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code',
             encoding:'utf8'
         },function(error,response,body){
             if(response.statusCode == 200){
