@@ -129,22 +129,22 @@ io.on('connection', function(socket){
 router.get('/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
-    var roomID = req.params.roomID;
-    var json=JSON.parse(fs.readFileSync('./list.json'));
-
-    //解析json文件内容，找到roomID对应的视频url
-    var vurl = '';
-    for(var i in json.video){
-        if(json.video[i].room == roomID){
-            vurl = json.video[i].url;
-        }
-    }
+    //var roomID = req.params.roomID;
+    //var json=JSON.parse(fs.readFileSync('./list.json'));
+    //
+    ////解析json文件内容，找到roomID对应的视频url
+    //var vurl = '';
+    //for(var i in json.video){
+    //    if(json.video[i].room == roomID){
+    //        vurl = json.video[i].url;
+    //    }
+    //}
 
     // 渲染页面数据(见views/room.hbs)
     res.render("room", {
         username:username,
-        userid:userid,
-        vurl:vurl
+        userid:userid
+        //vurl:vurl
     });
 });
 
@@ -174,6 +174,53 @@ router.get('/video', function (req, res) {
 
 router.get('/', function (req, res) {
     res.render('index');
+});
+
+var request = require('request');
+
+//微信认证
+router.get('/wx', function (req, res) {
+    var code = req.query.code;
+    console.log(code);
+    var access_token = '';
+    var openid = '';
+    var nickname = '';
+    request.get(
+        {
+            url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code'
+            encoding:'utf8'
+        },function(error,response,body){
+            if(response.statusCode == 200){
+                console.log(body.openid);
+                access_token = body.access_token;
+                openid = body.openid;
+            }else{
+                console.log(response.statusCode);
+                return
+            }
+        }
+    );
+
+    request.get(
+        {
+            url:'https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,
+            encoding:'utf8'
+        },function(error,response,body){
+            if(response.statusCode == 200){
+                console.log(body.nickname)
+                nickname = body.nickname;
+            }else{
+                console.log(response.statusCode);
+                return
+            }
+        }
+    );
+
+    res.render('list', {
+        username:nickname,
+        userid:openid
+    });
+
 });
 
 app.use('/', router);
