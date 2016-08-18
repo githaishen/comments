@@ -59,8 +59,8 @@ io.on('connection', function(socket){
         lines.reverse();
 
         //安全起见，获取的评论记录中删除userid信息后，再将username，comments和tims发送给前台
-        for(vari=0;i<lines.length;i++){
-            varitems=lines[i].split(',');
+        for(var i=0;i<lines.length;i++){
+            var items=lines[i].split(',');
             items.shift();//删除第一个元素userid
             items[0]='{'+items[0];//加上左括号
             lines[i]=items.join(',');
