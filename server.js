@@ -2,6 +2,7 @@
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var request = require('request');
 const fs = require("fs");
 const path = require('path');
 var router = express.Router();
@@ -158,7 +159,6 @@ router.get('/room/:roomID?', function (req, res) {
 });
 
 router.get('/list', function (req, res) {
-
     var username = req.query.username;
     var userid = req.query.userid;
 
@@ -181,30 +181,68 @@ router.get('/video', function (req, res) {
     });
 });
 
+//获取某个房间的评论数据，以json格式返回
+//调用方法http://XXX:3000/getComments/room001?num=10
+//room001为房间号
+//num为返回的评论数，如果不写num，全部返回
+router.get('/getComments/:roomID?', function (req, res) {
+    var roomID = req.params.roomID;
+    var num = req.query.num;
+
+    var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
+    var lines = txt.split("\n");
+    lines.pop();
+
+    if(num > 0){
+        var linenum = lines.length;
+        if(linenum > num){
+            lines.splice(0,linenum - num);
+        }
+    }
+
+    //最新的评论放在最前面
+    lines.reverse();
+
+    txt=lines.join('\n');
+    var json = JSON.parse('{"'+roomID+'": ['+txt.substr(0,txt.length-1)+']}');
+    res.json(json);
+});
+
+//获取某个房间的评论数据，以原文件格式返回
+router.get('/getCommentsFile/:roomID?', function (req, res) {
+    var roomID = req.params.roomID;
+    var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
+    res.send(txt);
+});
+
+//显示index页面，目前是让用户输入昵称或选择跳过，系统自动分配游客名称给用户
+//用于未经过微信认证的场合
 router.get('/', function (req, res) {
     res.render('index');
 });
 
-var request = require('request');
-
-//微信认证
+//微信认证，用于获取微信用户openid作为userid,nickname作为username
+//调用方式https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0c6c76f0c511299&redirect_uri=http://haishen-comments.daoapp.io/wx&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect
+//其中appid在微信公众号平台获取，本公众号的appid为wx0c6c76f0c5112993
+//    redirect_uri=http://haishen-comments.daoapp.io/wx为系统认证跳转网址，即指向本router
+//目前是在微信“专家讲堂”菜单中调用，调用后返回code，用于进一步获取openid和access_token
 router.get('/wx', function (req, res) {
     var code = req.query.code;
-    //console.log(code);
     var access_token = '';
     var openid = '';
     var nickname = '';
 
+    //通过code获取用户openid和access_token
     request('https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx0c6c76f0c5112993&secret=9ad514cf86d03a95938ca4fe16dec868&code='+code+'&grant_type=authorization_code',function(error,response,body) {
         if (!error && response.statusCode == 200) {
-            //console.log(body);
             var data = JSON.parse(body);
             access_token = data.access_token;
             openid = data.openid;
-            //console.log("openid=" + openid);
-            //console.log("access_token:"+access_token);
+
+            //获取微信用户信息，如昵称、logo地址等
             renderList(access_token,openid,res);
         } else {
+            //如果出错，让用户自行输入昵称
             console.log(response.statusCode);
             res.render('index');
         }
@@ -212,6 +250,8 @@ router.get('/wx', function (req, res) {
 
 });
 
+//调用微信接口，获取用户昵称等信息
+//由于nodejs为异步模式，因此考虑到微信获取用户信息接口，需要先获取openid和access_token，再获取用户信息，要采用同步模式，因此单独写一个函数供调用
 function renderList(access_token,openid,res){
     request.get('https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid,function(error,response,body) {
         if (!error && response.statusCode == 200) {
@@ -225,18 +265,22 @@ function renderList(access_token,openid,res){
                 userid:openid
             });
         } else {
+            //如果出错，让用户自行输入昵称
             console.log(response.statusCode);
             res.render("index");
         }
     });
 }
 
+//生成随机数，用于生成游客uiserid和名称
 function genUid(){
     return new Date().getTime()+""+Math.floor(Math.random()*899+100);
 }
 
 app.use('/', router);
 
+
+//监听浏览器3000端口访问
 http.listen(3000, function(){
     console.log('listening on *:3000');
 });
