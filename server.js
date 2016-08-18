@@ -56,7 +56,16 @@ io.on('connection', function(socket){
             lines.splice(0,linenum - display_num);
         }
         lines.reverse();
-        txt = lines.join('\n');
+
+        //安全起见，获取的评论记录中删除userid信息后，再将username，comments和tims发送给前台
+        for(vari=0;i<lines.length;i++){
+            varitems=lines[i].split(',');
+            items.shift();//删除第一个元素userid
+            items[0]='{'+items[0];//加上左括号
+            lines[i]=items.join(',');
+        }
+        txt=lines.join('\n');
+
         var json = JSON.parse('{"room": ['+txt.substr(0,txt.length-1)+']}');
         //console.log(roomInfo[roomID]);
         //var msg = Object.assign({onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj, roomCount:roomInfo[roomID].length},json);
@@ -120,7 +129,7 @@ io.on('connection', function(socket){
         //替换双引号（系统日志文件总以双引号分割）
         var REGEXP_QUOTE = /"/g;
         var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
-        fs.appendFileSync('./room/'+roomID+'.txt','{"username":"'+obj.username+'","comment":"'+filterMsg+'","times":"'+curTime+'"},\n');
+        fs.appendFileSync('./room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","comment":"'+filterMsg+'","times":"'+curTime+'"},\n');
         console.log(obj.username+'说：'+filterMsg);
     });
 });
@@ -129,22 +138,22 @@ io.on('connection', function(socket){
 router.get('/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
-    //var roomID = req.params.roomID;
-    //var json=JSON.parse(fs.readFileSync('./list.json'));
-    //
-    ////解析json文件内容，找到roomID对应的视频url
-    //var vurl = '';
-    //for(var i in json.video){
-    //    if(json.video[i].room == roomID){
-    //        vurl = json.video[i].url;
-    //    }
-    //}
+    var roomID = req.params.roomID;
+    var json=JSON.parse(fs.readFileSync('./list.json'));
+
+    //解析json文件内容，找到roomID对应的视频url
+    var vurl = '';
+    for(var i in json.video){
+        if(json.video[i].room == roomID){
+            vurl = json.video[i].url;
+        }
+    }
 
     // 渲染页面数据(见views/room.hbs)
     res.render("room", {
         username:username,
-        userid:userid
-        //vurl:vurl
+        userid:userid,
+        vurl:vurl
     });
 });
 
