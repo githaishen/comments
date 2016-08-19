@@ -114,8 +114,8 @@ io.on('connection', function(socket){
     //监听用户发布聊天内容
     socket.on('message', function(obj){
 
-        moment.locale('zh-cn');
-        var curTime = moment().format('lll');
+        //moment.locale('zh-cn');
+        var curTime = moment().format('YYYY-MM-DD HH:mm:ss');
 
         //向所有客户端广播发布的消息,加入当前时间
         io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,content:obj.content,times:curTime});
@@ -169,14 +169,14 @@ router.get('/list', function (req, res) {
     });
 });
 
-//router.get('/test',function(req,res){
-//    var nickname = "ab&cd ef+gh/ij?kl%3Fmn&op=qr";
-//    nickname = replaceURIChar(nickname);
-//    res.render('list', {
-//        username:nickname,
-//        userid:'1111'
-//    });
-//});
+router.get('/test',function(req,res){
+    var nickname = "ab&cd ef+gh/ij?kl%3Fmn&op=qr";
+    nickname = replaceURIChar(nickname);
+    res.render('list', {
+        username:nickname,
+        userid:'1111'
+    });
+});
 
 router.get('/video', function (req, res) {
 
