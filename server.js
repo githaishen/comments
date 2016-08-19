@@ -169,10 +169,21 @@ router.get('/list', function (req, res) {
     });
 });
 
+//router.get('/test',function(req,res){
+//    var nickname = "ab&cd ef+gh/ij?kl%3Fmn&op=qr";
+//    nickname = replaceURIChar(nickname);
+//    res.render('list', {
+//        username:nickname,
+//        userid:'1111'
+//    });
+//});
+
 router.get('/video', function (req, res) {
 
     var username = req.query.username;
     var userid = req.query.userid;
+
+    username = replaceURIChar(username);
 
     // 渲染页面数据(见views/video.hbs)
     res.render('video', {
@@ -260,6 +271,8 @@ function renderList(access_token,openid,res){
             if(typeof(data.nickname) == "undefined") {
                 nickname = "游客"+genUid();
             }
+            nickname = replaceURIChar(nickname);
+
             res.render('list', {
                 username:nickname,
                 userid:openid
@@ -275,6 +288,19 @@ function renderList(access_token,openid,res){
 //生成随机数，用于生成游客uiserid和名称
 function genUid(){
     return new Date().getTime()+""+Math.floor(Math.random()*899+100);
+}
+
+function replaceURIChar(str){
+    //替换到nickname中的http参数保留字符，包括%,+,空格,/,?,#,&,=
+    str = str.replace(/\%/g,'%25');
+    str = str.replace(/\+/g,'%2B');
+    str = str.replace(/\ /g,'%20');
+    str = str.replace(/\//g,'%2F');
+    str = str.replace(/\?/g,'%3F');
+    str = str.replace(/\#/g,'%23');
+    str = str.replace(/\&/g,'%26');
+    str = str.replace(/\=/g,'%3D');
+    return str;
 }
 
 app.use('/', router);

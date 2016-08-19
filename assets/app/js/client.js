@@ -6,7 +6,12 @@ function getQueryString(name){
 
 var msgObj=document.getElementById("message");
 //utf-8转换为中文，解决昵称中有中文，防止出现乱码
-var username=decodeURI(escape(getQueryString("username")));
+var username = escape(getQueryString("username"));
+username = username.replace(/%26/g,'&');
+username = username.replace(/%3F/g,'?');
+username = username.replace(/%3D/g,'=');
+username=decodeURI(username);
+
 var userid=getQueryString("userid");
 
 //连接websocket后端服务器
