@@ -286,6 +286,7 @@ function renderList(access_token,openid,res){
     });
 }
 
+:3000
 //生成随机数，用于生成游客uiserid和名称
 function genUid(){
     return new Date().getTime()+""+Math.floor(Math.random()*899+100);
@@ -307,7 +308,7 @@ function replaceURIChar(str){
 app.use('/', router);
 
 
-//监听浏览器3000端口访问
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+//监听浏览器8081端口访问
+http.listen(8081, function(){
+    console.log('listening on *:8081');
 });
