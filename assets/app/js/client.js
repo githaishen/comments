@@ -16,8 +16,8 @@ var userid=getQueryString("userid");
 
 //连接websocket后端服务器
 //var socket = io.connect('ws://haishen-comments.daoapp.io');
-//var socket= io.connect('ws://localhost:3000');
-var socket= io.connect('ws://evideocloud.com:8081');
+var socket= io.connect('ws://doctor.evideocloud.com/haishen');
+//var socket= io.connect('ws://evideocloud.com:8081/haishen');
 
 //告诉服务器端有用户加入房间
 socket.emit('join',  {userid:userid, username:username});

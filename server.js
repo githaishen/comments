@@ -1,7 +1,8 @@
 ﻿const express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var ios = require('socket.io')(http);
+var io = ios.of('/haishen');
 var request = require('request');
 const fs = require("fs");
 const path = require('path');
@@ -137,7 +138,7 @@ io.on('connection', function(socket){
 });
 
 // room page
-router.get('/room/:roomID?', function (req, res) {
+router.get('/haishen/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
@@ -159,7 +160,7 @@ router.get('/room/:roomID?', function (req, res) {
     });
 });
 
-router.get('/list', function (req, res) {
+router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
 
@@ -170,7 +171,7 @@ router.get('/list', function (req, res) {
     });
 });
 
-router.get('/test',function(req,res){
+router.get('/haishen/test',function(req,res){
     var nickname = "ab&cd ef+gh/ij?kl%3Fmn&op=qr";
     nickname = replaceURIChar(nickname);
     res.render('list', {
@@ -179,7 +180,7 @@ router.get('/test',function(req,res){
     });
 });
 
-router.get('/video', function (req, res) {
+router.get('/haishen/video', function (req, res) {
 
     var username = req.query.username;
     var userid = req.query.userid;
@@ -197,7 +198,7 @@ router.get('/video', function (req, res) {
 //调用方法http://XXX:3000/getComments/room001?num=10
 //room001为房间号
 //num为返回的评论数，如果不写num，全部返回
-router.get('/getComments/:roomID?', function (req, res) {
+router.get('/haishen/getComments/:roomID?', function (req, res) {
     var roomID = req.params.roomID;
     var num = req.query.num;
 
@@ -221,7 +222,7 @@ router.get('/getComments/:roomID?', function (req, res) {
 });
 
 //获取某个房间的评论数据，以原文件格式返回
-router.get('/getCommentsFile/:roomID?', function (req, res) {
+router.get('/haishen/getCommentsFile/:roomID?', function (req, res) {
     var roomID = req.params.roomID;
     var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
     res.send(txt);
@@ -229,7 +230,7 @@ router.get('/getCommentsFile/:roomID?', function (req, res) {
 
 //显示index页面，目前是让用户输入昵称或选择跳过，系统自动分配游客名称给用户
 //用于未经过微信认证的场合
-router.get('/', function (req, res) {
+router.get('/haishen', function (req, res) {
     res.render('index');
 });
 
@@ -238,7 +239,7 @@ router.get('/', function (req, res) {
 //其中appid在微信公众号平台获取，本公众号的appid为wx0c6c76f0c5112993
 //    redirect_uri=http://haishen-comments.daoapp.io/wx为系统认证跳转网址，即指向本router
 //目前是在微信“专家讲堂”菜单中调用，调用后返回code，用于进一步获取openid和access_token
-router.get('/wx', function (req, res) {
+router.get('/haishen/wx', function (req, res) {
     var code = req.query.code;
     var access_token = '';
     var openid = '';
@@ -286,7 +287,6 @@ function renderList(access_token,openid,res){
     });
 }
 
-:3000
 //生成随机数，用于生成游客uiserid和名称
 function genUid(){
     return new Date().getTime()+""+Math.floor(Math.random()*899+100);

@@ -17,7 +17,7 @@ function usernameSubmit(){
 	var userid = genUid();
 	if(username != ""){
 		document.getElementById("username").value = '';
-		window.location = "/list?username="+username+"&userid="+userid
+		window.location = "/haishen/list?username="+username+"&userid="+userid
 	}
 	return false;
 }
@@ -26,7 +26,7 @@ function usernameSubmit(){
 function usernameSkip(){
 	var userid = this.genUid();
 	var username = "游客"+userid;
-	window.location = "/list?username="+username+"&userid="+userid;
+	window.location = "/haishen/list?username="+username+"&userid="+userid;
 	return false;
 }
 
