@@ -15,7 +15,7 @@ username=decodeURI(username);
 var userid=getQueryString("userid");
 
 //连接websocket后端服务器
-var socket = io.connect('ws://haishen-comments.daoapp.io/');
+var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
 //var socket= io.connect('ws://localhost:8081/haishen');
 //var socket= io.connect('ws://4k.evideocloud.com/haishen');
 
