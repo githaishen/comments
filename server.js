@@ -79,7 +79,7 @@ io.on('connection', function(socket){
         io.to(roomID).emit('join', msg);
 
         // 后台日志显示
-        console.log(obj.username + '加入了' + roomID+"房间");
+        //console.log(obj.username + '加入了' + roomID+"房间");
     });
 
     socket.on('leave', function () {
@@ -107,7 +107,9 @@ io.on('connection', function(socket){
             //io.to(roomID).emit('leave', {onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj,roomCount:roomInfo[roomID].length});
             io.to(roomID).emit('leave', {user:obj,roomCount:roomInfo[roomID].length});
             socket.leave(roomID);//退出房间
-            console.log(obj.username+'退出了'+roomID+'房间');
+
+            //后台日志显示
+            //console.log(obj.username+'退出了'+roomID+'房间');
         }
     });
 
@@ -133,7 +135,9 @@ io.on('connection', function(socket){
         var REGEXP_QUOTE = /"/g;
         var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
         fs.appendFileSync('./room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","comment":"'+filterMsg+'","times":"'+curTime+'"},\n');
-        console.log(obj.username+'说：'+filterMsg);
+
+        //后台日志显示
+        //console.log(obj.username+'说：'+filterMsg);
     });
 });
 
@@ -184,13 +188,25 @@ router.get('/haishen/video', function (req, res) {
 
     var username = req.query.username;
     var userid = req.query.userid;
+    var expertid = req.query.expertid;
 
     username = replaceURIChar(username);
 
+    var json=JSON.parse(fs.readFileSync('./list.json'));
+
+    var list = new Array();
+    for(var i in json.video){
+        if(json.video[i].expertid == expertid){
+            var room = json.video[i].room;
+            var url = "/haishen/room/"+room+"?username="+username+"&userid="+userid;
+            var pic = "/assets/app/img/"+room+".jpg";
+            list.push({url:url,title:json.video[i].title,pic:pic});
+        }
+    }
+
     // 渲染页面数据(见views/video.hbs)
     res.render('video', {
-        username:username,
-        userid:userid
+        list:list
     });
 });
 
@@ -256,7 +272,6 @@ router.get('/haishen/wx', function (req, res) {
             renderList(access_token,openid,res);
         } else {
             //如果出错，让用户自行输入昵称
-            console.log(response.statusCode);
             res.render('index');
         }
     });
@@ -281,7 +296,6 @@ function renderList(access_token,openid,res){
             });
         } else {
             //如果出错，让用户自行输入昵称
-            console.log(response.statusCode);
             res.render("index");
         }
     });

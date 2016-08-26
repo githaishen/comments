@@ -4,6 +4,9 @@
     <meta charset="utf-8"/>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
     <title>专家讲堂</title>
     <link rel="stylesheet" href="/assets/app/css/zheng.css">
 </head>
@@ -15,12 +18,19 @@
 <div class="bg"></div>
 
 <div class="content">
-    <div class="yi">
-        <div class="yi_pic">
-            <a href=/haishen/room/room001?username={{username}}&userid={{userid}}"><img src="/assets/app/img/1.jpg" /></a>
+    {{#each list}}
+        <div class="yi">
+            <div class="yi_pic">
+                <a href={{this.url}}><img src={{pic}} /></a>
+            </div>
+            <div class="yi_content">
+                <a href={{this.url}}><h3>{{this.title}}</h3></a>
+            </div>
         </div>
-        <div class="yi_content">
-            <a href="/haishen/room/room001?username={{username}}&userid={{userid}}"><h3>郑重教授介绍物理诊疗专委会及神经电生理诊疗在精神科的作用</h3></a>
+    {{/each}}
+    <div class="yi">
+        <div class="next">
+            <h2>更多精彩视频，敬请期待……</h2>
         </div>
     </div>
 </div>
@@ -28,7 +38,7 @@
 <script type="text/javascript">
     //下拉效果
     $(document).ready(function(){
-        $(".content").slideToggle(2500);
+        $(".content").slideToggle(1500);
     });
 </script>
 

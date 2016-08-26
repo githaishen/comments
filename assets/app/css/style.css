@@ -6,23 +6,24 @@ body{
 	background:#060e1b;
  	 
 	 }
-.box{margin:20px 10px;}
+.box{margin:10px 5px;}
 ul li{list-style:none}
-li{ width:80%;
+li{ width:320px;
 	margin:0 auto;
+	margin-bottom:15px;
 	display:block;
-	padding:20px;
+	padding:10px;
 	background-color:#FFF;
 	border:solid #0CF 2px;
-	font-size:18px;
+	font-size:12px;
 	-moz-border-radius:2em; -webkit-border-radius:2em; border-radius:2em;
 	-moz-box-shadow:2px 2px 20px #24AEE0; -webkit-box-shadow:2px 2px 20px #24AEE0; box-shadow:2px 2px 20px #24AEE0;
-	text-shadow:1px 1px 1px #333333;
+	
 	position:relative;
-	animation:myfirst 1s;       /*div抖动*/
-	-moz-animation:myfirst 1s; /* Firefox */
-	-webkit-animation:myfirst 1s; /* Safari and Chrome */
-	-o-animation:myfirst 1s; /* Opera */
+animation:myfirst 1s;
+-moz-animation:myfirst 1s; /* Firefox */
+-webkit-animation:myfirst 1s; /* Safari and Chrome */
+-o-animation:myfirst 1s; /* Opera */
 }
 
 @keyframes myfirst
@@ -63,15 +64,19 @@ li{ width:80%;
 
 li img{float:left;
 	-moz-border-radius:2em; -webkit-border-radius:2em; border-radius:2em;
-	margin-right:10px;
-	margin-bottom:10px;}
-li span{ font-size:28px; color:#06F;
+	margin-right:5px;
+	margin-bottom:5px;
+	weight:71px;
+	height:100px;
+}
+li span{ font-size:18px; color:#06F; 
 	}
 a{text-decoration:none;}
 a.button { float:right;
-	width:160px; height:40px;
+	width:80px; height:20px;
 	display:block;
-	font-size:30px;
+	font-size:10px;
+	line-height:20px;
 	font-family:"黑体";
 	font-weight:bolder;
 	-webkit-border-top-left-radius:40px;
@@ -86,33 +91,9 @@ a.button { float:right;
 	color:#FFF;
 	
 	text-align:center;
-	animation-name: greenPilse;              /*按钮变色*/
-	animation-duration: 2s;
-	animation-iteration-count: infinite;
-	-moz-animation-name: greenPilse;
-	-moz-animation-duration: 2s;
-	-moz-animation-iteration-count: infinite;
-	-o-animation-name: greenPilse;
-	-o-animation-duration: 2s;
-	-o-animation-iteration-count: infinite;
-	 -webkit-animation-name: greenPulse;
-	 -webkit-animation-duration: 2s;
-	 -webkit-animation-iteration-count: infinite;
-}
-@keyframes greenPulse {
-  from { background-color: #749a02; box-shadow: 0 0 9px #333; }
-  50% { background-color: #91bd09; box-shadow: 0 0 18px #91bd09; }
-  to { background-color:#749a02; box-shadow: 0 0 9px #333; }
-}
-@-moz-keyframes greenPulse {
-  from { background-color: #749a02; -moz-box-shadow: 0 0 9px #333; }
-  50% { background-color: #91bd09; -moz-box-shadow: 0 0 18px #91bd09; }
-  to { background-color: #749a02; -moz-box-shadow: 0 0 9px #333; }
-}
-@-o-keyframes greenPulse {
-  from { background-color: #749a02; -o-box-shadow: 0 0 9px #333; }
-  50% { background-color: #91bd09; -o-box-shadow: 0 0 18px #91bd09; }
-  to { background-color: #749a02; -o-box-shadow: 0 0 9px #333; }
+  -webkit-animation-name: greenPulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
 }
 @-webkit-keyframes greenPulse {
   from { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333; }
@@ -120,10 +101,11 @@ a.button { float:right;
   to { background-color: #749a02; -webkit-box-shadow: 0 0 9px #333; }
 }
 
-.bar{margin:10px auto;}
+.bar{margin:5px auto;
+	width:320px;}
 .bar p{color:#FFF;
-		font-size:24px;
-		letter-spacing:10px;
+		font-size:18px;
+		letter-spacing:5px;
 		color: #ffffff;;
 		text-shadow: 0 0 5px #fff, 
 		0 0 10px #fff,
@@ -138,8 +120,15 @@ a.button { float:right;
 canvas{  
 		position: absolute;
 		//opacity: 0.5;
-		z-index:-1;
+		z-index:-1;		 
+	
 }
 
+.next{height:150px; text-align:center; }
+.next img{ height:150px;}
+.next h1{ font-weight:900;
+		margin-top:40px;
+		text-shadow:2px 2px 2px #999;
+		  }
 
 
