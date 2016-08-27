@@ -118,8 +118,8 @@ io.on('connection', function(socket){
     socket.on('message', function(obj){
 
         //moment.locale('zh-cn');
-        var curTime = moment().format('YYYY-MM-DD HH:mm:ss');//操作系统如果设置了北京时间，采用这种获取时间方法
-        //var curTime = moment().add(8,'h').format('YYYY-MM-DD HH:mm:ss');//目前daocloud主机时间是格林威治时间，北京在东8区，增加8小时
+        //var curTime = moment().format('YYYY-MM-DD HH:mm:ss');//操作系统如果设置了北京时间，采用这种获取时间方法
+        var curTime = moment().add(8,'h').format('YYYY-MM-DD HH:mm:ss');//目前daocloud主机时间是格林威治时间，北京在东8区，增加8小时
 
         //向所有客户端广播发布的消息,加入当前时间
         io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,content:obj.content,times:curTime});
