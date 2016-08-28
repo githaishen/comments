@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>专家讲堂</title>
+<head data-gwd-animation-mode="proMode"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>电生理之家</title>
+    <script type="text/javascript">
+        var jsVer = 22;
+        var pWidth = parseInt(window.screen.width);
+        var Scale = pWidth/640;
+        var ua = navigator.userAgent;
+        if(Scale<1){
+            document.write('<meta name="screen-orientation" content="portrait">');
+            document.write('<meta name="x5-orientation" content="portrait"/>');
+            document.write('<meta name="full-screen" content="yes">');
+            document.write('<meta name="x5-fullscreen" content="true"/>');
+            document.write('<meta name="browsermode" content="application"/>');
+            document.write('<meta name="x5-page-mode" content="app"/>');
+            document.write('<meta name="apple-touch-fullscreen" content="YES">');
+            document.write('<meta name="apple-mobile-web-app-capable" content="yes">');
+        }
+        if (/Android (\d+\.\d+)/.test(ua)){
+            var version = parseFloat(RegExp.$1);
+            // andriod 2.3
+            if(version>2.3){
+                document.write('<meta name="viewport" content="width=640, minimum-scale = '+Scale+', maximum-scale = '+Scale+', target-densitydpi=device-dpi">');
+                // andriod 2.3以上
+            }else{
+                document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+            }
+            // 其他系统
+        } else {
+            document.write('<meta name="viewport" content="width=640, user-scalable=no , target-densitydpi=device-dpi">');
+        }
+    </script>
+
+    <meta name="viewport" content="width=640, user-scalable=no , target-densitydpi=device-dpi">
+
     <link rel="stylesheet" href="/assets/agile/css/agile.layout.css">
     <link rel="stylesheet" href="/assets/third/seedsui/plugin/seedsui/seedsui.min.css">
 </head>
@@ -15,11 +44,10 @@
             <header>
                 <h3>敬请收看：</h3>
                 <div style="background:#000;text-align:center;margin:0 auto;">
-                    <video height="150" src="{{vurl}}"  controls=""></video>
-                    <!--<video height="150" src="http://play.evideocloud.net/123454581/0/16/a8/a7/hls/8786d478b2686688b54a988f4fa5105e_3.m3u8?duration=3570&owner=123454581&path=%2F123454581%2F0%2F16%2Fa8%2Fa7%2Fhls%2F8786d478b2686688b54a988f4fa5105e_3.m3u8&quality=720P&sign=22f5dad432ff808b2ddbb832cdef56dfe11e065d0b43a10fce6f2488e5f00548&timestamp=1471317048&title=%E9%83%91%E9%87%8D%E4%B8%A4%E6%AE%B5_%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6.FLV&vid=016a8a7e5efd11e6af2506d96dcff49f&&para1=yyy&para2=xxx"  controls=""></video>-->
+                    <video src="{{vurl}}"  controls="" poster="{{poster}}" height="362"></video>
                 </div>
             </header>
-            <article data-role="article" id="index_article" class="active" style="top:190px;bottom:35px;">
+            <article data-role="article" id="index_article" class="active" style="top:402px;bottom:35px;">
             <div class="scroller">
                 <details open>
                     <summary class="sliver">
@@ -30,6 +58,13 @@
                             <div class="justify-content">
                                 <p>Welcome</p>
                                 <small>欢迎您参与评论。</small>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="list" id="qr">
+                        <li>
+                            <div class="justify-content">
+                                <img src="/assets/app/img/qr.jpg" alt="" style="width:156px;height:auto;display:block;margin:0 auto;">
                             </div>
                         </li>
                     </ul>

@@ -14,6 +14,7 @@
         请输入您的昵称
         <br/>
         <br/>
+        <input type="hidden" name="state" id="state" value="{{state}}">
         <input type="text" style="width:180px;" placeholder="昵称" id="username" name="username" maxlength="20" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')"/>
         <input type="button"  value="提交" onclick="usernameSubmit();"/>
         <br />

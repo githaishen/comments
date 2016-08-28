@@ -5,6 +5,7 @@ function genUid(){
 //用户提交昵称
 function usernameSubmit(){
 	var username = document.getElementById("username").value;
+	var state = document.getElementById("state").value;
 	////防止xss攻击，过滤掉
 	//username = filterXSS(username,{
 	//	whiteList:          [],        // 白名单为空，表示过滤所有标签
@@ -17,16 +18,25 @@ function usernameSubmit(){
 	var userid = genUid();
 	if(username != ""){
 		document.getElementById("username").value = '';
-		window.location = "/haishen/list?username="+username+"&userid="+userid
+		if(state == 1) {//直播
+			window.location = "/haishen/room/testroom?username="+username+"&userid="+userid
+		}else{//专家讲堂
+			window.location = "/haishen/list?username=" + username + "&userid=" + userid
+		}
 	}
 	return false;
 }
 
 //用户跳过昵称，缺省为用户分配一个游客昵称
 function usernameSkip(){
+	var state = document.getElementById("state").value;
 	var userid = this.genUid();
 	var username = "游客"+userid;
-	window.location = "/haishen/list?username="+username+"&userid="+userid;
+	if(state == 1) {//直播
+		window.location = "/haishen/room/testroom?username="+username+"&userid="+userid
+	}else{//专家讲堂
+		window.location = "/haishen/list?username=" + username + "&userid=" + userid
+	}
 	return false;
 }
 
