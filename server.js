@@ -146,10 +146,8 @@ router.get('/haishen/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
-    var poster = "";
-    if(roomID == 'zhiboroom') {
-        poster = "/assets/app/img/poster.jpg";
-    }
+    var poster = "/assets/app/img/"+roomID+"_poster.jpg";
+
     var json=JSON.parse(fs.readFileSync('./list.json'));
 
     //解析json文件内容，找到roomID对应的视频url
@@ -243,7 +241,7 @@ router.get('/haishen/getCommentsFile/:roomID?', function (req, res) {
 
 //显示index页面，目前是让用户输入昵称或选择跳过，系统自动分配游客名称给用户
 //用于未经过微信认证的场合
-router.get('/haishen', function (req, res) {
+router.get('/haishen/nickname', function (req, res) {
     res.render("index",{
         state:2 //缺省进入“专家讲堂“
     });
