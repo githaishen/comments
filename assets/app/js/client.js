@@ -34,9 +34,9 @@ socket.on('leave', function(o){
 
 //监听消息发送
 socket.on('message', function(obj){
-	var contentDiv = '<small>'+obj.content+'</small>';
-	var timeDiv = '<small>'+obj.times+'</small>';
-	var usernameDiv = '<p>'+obj.username+'</p>';
+	var contentDiv = '<small style="font-size:130%">'+obj.content+'</small>';
+	var timeDiv = '<small style="font-size:130%">'+obj.times+'</small>';
+	var usernameDiv = '<p style="font-size:130%">'+obj.username+'</p>';
 
 	var section = document.createElement('li');
 	section.innerHTML = "<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
@@ -75,9 +75,9 @@ function updateSysMsg(o, action){
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
 		for(var i= 0;i<o.room.length;i++){
-			var contentDiv = '<small>'+o.room[i].comment+'</small>';
-			var usernameDiv = '<p>'+o.room[i].username+'</p>';
-			var timeDiv = '<small>'+o.room[i].times+'</small>';
+			var contentDiv = '<small style="font-size:130%">'+o.room[i].comment+'</small>';
+			var usernameDiv = '<p  style="font-size:130%">'+o.room[i].username+'</p>';
+			var timeDiv = '<small style="font-size:130%">'+o.room[i].times+'</small>';
 
 			var section = document.createElement('li');
 			section.innerHTML = "<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";

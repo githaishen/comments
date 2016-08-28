@@ -49,7 +49,7 @@ io.on('connection', function(socket){
         socket.join(roomID);    // 加入房间
 
         //设置显示条数（最新的），具体做法：读取数据、分割为数据、删除前linenum-displaynum条、倒排序让最新的放到最前面
-        var display_num = 50;
+        var display_num = 200;
         var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
         var lines = txt.split("\n");
         lines.pop();
