@@ -185,23 +185,27 @@ router.get('/haishen/video', function (req, res) {
     var expertid = req.query.expertid;
 
     username = replaceURIChar(username);
+    if(username == ''){
+        res.send("访问网址路径出错！");
+        console.log("访问网址路径出错！");
+    }else{
+        var json=JSON.parse(fs.readFileSync('./list.json'));
 
-    var json=JSON.parse(fs.readFileSync('./list.json'));
-
-    var list = new Array();
-    for(var i in json.video){
-        if(json.video[i].expertid == expertid){
-            var room = json.video[i].room;
-            var url = "/haishen/room/"+room+"?username="+username+"&userid="+userid;
-            var pic = "/assets/app/img/"+room+".jpg";
-            list.push({url:url,title:json.video[i].title,pic:pic});
+        var list = new Array();
+        for(var i in json.video){
+            if(json.video[i].expertid == expertid){
+                var room = json.video[i].room;
+                var url = "/haishen/room/"+room+"?username="+username+"&userid="+userid;
+                var pic = "/assets/app/img/"+room+".jpg";
+                list.push({url:url,title:json.video[i].title,pic:pic});
+            }
         }
-    }
 
-    // 渲染页面数据(见views/video.hbs)
-    res.render('video', {
-        list:list
-    });
+        // 渲染页面数据(见views/video.hbs)
+        res.render('video', {
+            list:list
+        });
+    }
 });
 
 //获取某个房间的评论数据，以json格式返回
@@ -310,14 +314,18 @@ function renderList(access_token,openid,res,state){
                 nickname = "游客"+genUid();
             }
             nickname = replaceURIChar(nickname);
-
-            if(state == 2) {//专家讲堂
-                res.render('list', {
-                    username: nickname,
-                    userid: openid
-                });
-            }else{//直播
-                res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname);
+            if(nickname == ''){
+                res.send("您的昵称信息访问出错！");
+                console.log("用户昵称信息访问出错！");
+            }else{
+                if(state == 2) {//专家讲堂
+                    res.render('list', {
+                        username: nickname,
+                        userid: openid
+                    });
+                }else{//直播
+                    res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname);
+                }
             }
         } else {
             //如果出错，让用户自行输入昵称
@@ -335,6 +343,9 @@ function genUid(){
 
 function replaceURIChar(str){
     //替换到nickname中的http参数保留字符，包括%,+,空格,/,?,#,&,=
+    if(typeof(str) == 'undefined'){
+        return "";
+    }
     str = str.replace(/\%/g,'%25');
     str = str.replace(/\+/g,'%2B');
     str = str.replace(/\ /g,'%20');
