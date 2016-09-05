@@ -1,0 +1,60 @@
+var msgObj=document.getElementById("message");
+
+function genUid(){
+	return new Date().getTime()+""+Math.floor(Math.random()*899+100);
+}
+
+//连接websocket后端服务器
+var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
+//var socket= io.connect('ws://localhost:3000/haishen');
+//var socket= io.connect('ws://4k.evideocloud.com/haishen');
+var userid = genUid();
+var username = "admin"+userid;
+
+socket.emit('join',  {userid:userid, username:username});
+
+//监听新用户登录
+socket.on('join', function(o){
+	updateSysMsg(o, 'join');
+});
+
+//监听新用户登录
+socket.on('leave', function(o){
+	updateSysMsg(o, 'leave');
+});
+
+//监听消息发送
+socket.on('message', function(obj){
+	var contentDiv = '<h1>'+obj.content+'</h1>';
+	var user_timeDiv = '<h2>'+obj.username+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+obj.times+'</h2>';
+
+	var section = document.createElement('li');
+	section.innerHTML = "<div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
+	msgObj.insertBefore(section,msgObj.childNodes[1]);
+});
+
+
+//更新系统消息，本例中在用户加入、退出的时候调用
+function updateSysMsg(o, action){
+	//当前总的在线用户列表
+	//var onlineUsers = o.onlineUsers;
+	//当前总的在线人数
+	//var onlineCount = o.onlineCount;
+	//新加入用户的信息
+	var user = o.user;
+
+	var roomCount = o.roomCount;
+
+	document.getElementById("onlinecount").innerHTML = '当前共有 '+roomCount+' 人在线';
+
+	//如果是新加入的用户，显示最近几条信息
+	if(user.username == username){
+		for(var i= 0;i<o.room.length;i++){
+			var contentDiv = '<h1>'+o.room[i].comment+'</h1>';
+			var user_timeDiv = '<h2>'+o.room[i].username+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+o.room[i].times+'</h2>';
+			var section = document.createElement('li');
+			section.innerHTML = "<div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
+			msgObj.appendChild(section);
+		}
+	}
+}

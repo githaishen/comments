@@ -28,6 +28,10 @@ io.on('connection', function(socket){
     var splited2 = splited[0].split('/');
     var roomID = splited2[splited2.length-1];   // 获取房间ID,类似room001
 
+    if(roomID == "wall"){
+        roomID = "zhiboroom";
+    }
+
     socket.on('join', function (obj) {
 
         socket.name = obj.userid;
@@ -145,6 +149,13 @@ router.get('/haishen/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
+
+    if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
+        res.send("网页网址访问错误！");
+        console.log("room网页网址访问错误！");
+        return;
+    }
+
     var poster = "/assets/app/img/"+roomID+"_poster.jpg";
 
     var json=JSON.parse(fs.readFileSync('./list.json'));
@@ -166,9 +177,22 @@ router.get('/haishen/room/:roomID?', function (req, res) {
     });
 });
 
+// room page
+router.get('/haishen/wall', function (req, res) {
+
+    // 渲染页面数据(见views/room.hbs)
+    res.render("wall");
+});
+
 router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
+
+    if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
+        res.send("网页网址访问错误！");
+        console.log("list网页网址访问错误！");
+        return;
+    }
 
     // 渲染页面数据(见views/list.hbs)
     res.render('list', {
@@ -184,10 +208,11 @@ router.get('/haishen/video', function (req, res) {
     var userid = req.query.userid;
     var expertid = req.query.expertid;
 
+
     username = replaceURIChar(username);
-    if(username == ''){
-        res.send("访问网址路径出错！");
-        console.log("访问网址路径出错！");
+    if(username == '' || userid == ''){
+        res.send("网页网址访问错误！");
+        console.log("video网页网址访问错误！");
     }else{
         var json=JSON.parse(fs.readFileSync('./list.json'));
 
