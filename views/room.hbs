@@ -2,6 +2,7 @@
 <html>
 <head data-gwd-animation-mode="proMode"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>电生理之家</title>
+
     <script type="text/javascript">
         var jsVer = 22;
         var pWidth = parseInt(window.screen.width);
@@ -37,22 +38,32 @@
     <link rel="stylesheet" href="/assets/agile/css/agile.layout.css">
     <link rel="stylesheet" href="/assets/third/seedsui/plugin/seedsui/seedsui.min.css">
     <script type="text/javascript" src="/assets/app/js/stat.js"></script>
+
 </head>
 <body>
 <div id="chatbox">
     <div id="section_container">
         <section id="index_section" class="active" data-role="section">
             <header>
-                <h2>敬请收看：</h2>
+				
+                <h2 style=" float:left;">敬请收看：</h2>
+				<a href="javascript:changeh();"> <div id="high" style="background-color: #000;float:right ;  width:30px ; height:20px ; color:#FFF; 		font-size:9px; margin:5px 5px 0 5px;border-radius:4px; text-align:center; line-height:20px; border-color:#000;display:none;">高清</div></a>
+                 
+               	<a href="javascript:changel();"> <div id="low" style="background-color: #ccc;float:right ;  width:30px ; height:20px ; color:#FFF; font-size:9px; margin:5px 5px 0 5px;border-radius:4px; text-align:center; line-height:20px; border-color:#000;display:none;">流畅</div></a>
                 <div style="background:#000;text-align:center;margin:0 auto;">
-                    <video src="{{vurl}}"  controls="" poster="{{poster}}" height="362"></video>
+                    <video id="vi" src="{{vurl}}"  controls="" poster="{{poster}}" height="362" loop="loop"></video>
                 </div>
             </header>
             <article data-role="article" id="index_article" class="active" style="top:402px;bottom:35px;">
+			 <!--              倒               计              时           -->
+        		
+         		<div id="countdown" style="text-align:center; vertical-align:middle; display:none;"></div> 
+            	
             <div class="scroller">
                 <details open>
                     <summary class="sliver">
-                        <div id="onlinecount" style="font-size:130%"></div>
+                        <div id="onlinecount" style="font-size:130%;"></div>
+						
                     </summary>
                     <ul class="list" id="message">
                         <li>
@@ -88,4 +99,70 @@
 <!--cnzz流量-->
 <div style="display:none"><script src="http://s11.cnzz.com/z_stat.php?id=1260236352&web_id=1260236352" language="JavaScript"></script></div>
 </body>
+	<script>
+		var strHref = window.document.location.href; 
+		var key = strHref.indexOf("zhibo");
+		function MyAutoRun()
+		{
+			if(key != -1){
+				document.getElementById('high').style.display = 'block';
+				document.getElementById('low').style.display = 'block';
+				document.getElementById('countdown').style.display = 'block';
+				} else {
+					console.log(key);
+					}
+		}
+		console.log(document.getElementById('vi').src);
+		window.onload=MyAutoRun();
+	</script>
+	 <!--切换画质按钮事件-->
+<script>
+
+ function changeh(){                                                <!--高清按钮-->
+	
+	if (document.getElementById('high').style.backgroundColor != '#000' || document.getElementById('high').style.backgroundColor != 'rgb( 0, 0, 0)'){
+		document.getElementById('high').style.backgroundColor = '#000';
+		
+		document.getElementById('low').style.backgroundColor = '#ccc';
+		document.getElementById('vi').src = 'http://live.evideocloud.net/live/smg__4O180g5Pql5r/smg__4O180g5Pql5r.m3u8';
+		document.getElementById("vi").load();
+		console.log(document.getElementById('vi').src);
+	} else {
+		console.log(document.getElementById('vi').src);
+	}
+ }
+
+ 
+  function changel(){                                                     <!--流畅按钮-->
+	
+	if (document.getElementById('low').style.backgroundColor != '#000' || document.getElementById('low').style.backgroundColor != 'rgb( 0, 0, 0)'){
+		document.getElementById('low').style.backgroundColor = '#000';
+		
+		document.getElementById('high').style.backgroundColor = '#ccc';
+		document.getElementById('vi').src = 'http://live.evideocloud.net/live/smg__4O180g5Pql5r/smg__4O180g5Pql5r.m3u8';
+		document.getElementById("vi").load();
+		console.log(document.getElementById('vi').src);
+	} else {
+		console.log(document.getElementById('vi').src);
+	}
+	 }
+ </script>
+ <!--        倒           计            时          -->
+<script>
+	var interval = 1000; 
+	function ShowCountDown(year,month,day,hour,divname) 
+	{ 
+	var now = new Date(); 
+	var endDate = new Date(year, month-1, day, hour); 
+	var leftTime=endDate.getTime()-now.getTime(); 
+	var leftsecond = parseInt(leftTime/1000); 
+	var day1=Math.floor(leftsecond/(60*60*24)); 
+	var hour1=Math.floor((leftsecond-day1*24*60*60)/3600); 
+	var minute=Math.floor((leftsecond-day1*24*60*60-hour1*3600)/60); 
+	var second=Math.floor(leftsecond-day1*24*60*60-hour1*3600-minute*60); 
+	var cc = document.getElementById(divname); 
+	cc.innerHTML = "西安神经电生理学习班倒计时："+day1+"天"+hour1+"小时"+minute+"分"+second+"秒"; 
+	} 
+	window.setInterval(function(){ShowCountDown(2016,9,10,8,'countdown');}, interval); 
+</script> 
 </html>
