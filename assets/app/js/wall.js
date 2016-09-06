@@ -23,13 +23,19 @@ socket.on('leave', function(o){
 	updateSysMsg(o, 'leave');
 });
 
+//监听删除评论
+socket.on('del', function(o){
+	msgObj.removeChild(document.getElementById(o.commentid));
+});
+
 //监听消息发送
 socket.on('message', function(obj){
 	var contentDiv = '<h1>'+obj.content+'</h1>';
 	var user_timeDiv = '<h2>'+obj.username+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+obj.times+'</h2>';
 
 	var section = document.createElement('li');
-	section.innerHTML = "<div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
+	section.id = obj.commentid;
+	section.innerHTML = "<div class='user-head'><img src ="+ obj.headimgurl +" alt=''/></div><div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
 	msgObj.insertBefore(section,msgObj.childNodes[1]);
 });
 
@@ -53,7 +59,8 @@ function updateSysMsg(o, action){
 			var contentDiv = '<h1>'+o.room[i].comment+'</h1>';
 			var user_timeDiv = '<h2>'+o.room[i].username+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+o.room[i].times+'</h2>';
 			var section = document.createElement('li');
-			section.innerHTML = "<div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
+			section.id = o.room[i].commentid;
+			section.innerHTML = "<div class='user-head'><img src ="+ o.room[i].headimgurl +" alt=''/></div><div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
 			msgObj.appendChild(section);
 		}
 	}

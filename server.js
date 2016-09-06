@@ -9,10 +9,15 @@ const path = require('path');
 var router = express.Router();
 var xss = require('xss');
 var moment = require('moment');
+var bodyParser = require('body-parser');
 
 app.use('/assets', express.static('./assets/'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.use(bodyParser.urlencoded({ extended: false }));
+
+////解析json格式的body，否则POST json 数据时 body为空
+//app.use(bodyParser.json());
 
 // 房间用户名单
 var roomInfo = {};
@@ -52,7 +57,7 @@ io.on('connection', function(socket){
         socket.join(roomID);    // 加入房间
 
         //设置显示条数（最新的），具体做法：读取数据、分割为数据、删除前linenum-displaynum条、倒排序让最新的放到最前面
-        var display_num = 200;
+        var display_num = 300;
         var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
         var lines = txt.split("\n");
         lines.pop();
@@ -62,7 +67,7 @@ io.on('connection', function(socket){
         }
         lines.reverse();
 
-        //安全起见，获取的评论记录中删除userid信息后，再将username，comments和tims发送给前台
+        //安全起见，获取的评论记录中删除userid信息后，再将commentid，username，comments和tims发送给前台
         for(var i=0;i<lines.length;i++){
             var items=lines[i].split(',');
             items.shift();//删除第一个元素userid
@@ -123,9 +128,10 @@ io.on('connection', function(socket){
         //moment.locale('zh-cn');
         //var curTime = moment().format('YYYY-MM-DD HH:mm:ss');//操作系统如果设置了北京时间，采用这种获取时间方法
         var curTime = moment().add(8,'h').format('YYYY-MM-DD HH:mm:ss');//目前daocloud主机时间是格林威治时间，北京在东8区，增加8小时
+        var commentid = genUid();
 
         //向所有客户端广播发布的消息,加入当前时间
-        io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,content:obj.content,times:curTime});
+        io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,commentid:commentid,content:obj.content,times:curTime,headimgurl:obj.headimgurl});
 
         //防止xss攻击，去掉HTML标签
         var  filterHtml= xss(obj.content, {
@@ -137,11 +143,16 @@ io.on('connection', function(socket){
         //替换双引号（系统日志文件总以双引号分割）
         var REGEXP_QUOTE = /"/g;
         var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
-        fs.appendFileSync('./room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","comment":"'+filterMsg+'","times":"'+curTime+'"},\n');
+        fs.appendFileSync('./room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","commentid":"'+commentid+'","comment":"'+filterMsg+'","headimgurl":"'+obj.headimgurl+'","times":"'+curTime+'"},\n');
 
         //后台日志显示
         console.log(obj.username+'说：'+filterMsg);
     });
+
+    ////监听删除评论消息
+    //socket.on('del', function(obj) {
+    //    io.to(obj.roomID).emit("del",{commentid:obj.commentid});
+    //});
 });
 
 // room page
@@ -168,16 +179,14 @@ router.get('/haishen/room/:roomID?', function (req, res) {
         }
     }
 
-    // 渲染页面数据(见views/room.hbs)
+     //渲染页面数据(见views/room.hbs)
     res.render("room", {
-        username:username,
-        userid:userid,
         vurl:vurl,
         poster:poster
     });
 });
 
-// room page
+// wall page
 router.get('/haishen/wall', function (req, res) {
 
     // 渲染页面数据(见views/room.hbs)
@@ -187,6 +196,8 @@ router.get('/haishen/wall', function (req, res) {
 router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
+    var headimgurl = req.query.headimgurl;
+    console.log(username);
 
     if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
         res.send("网页网址访问错误！");
@@ -194,10 +205,15 @@ router.get('/haishen/list', function (req, res) {
         return;
     }
 
+    if(typeof(headimgurl) == "undefined") {
+        headimgurl = '';
+    }
+
     // 渲染页面数据(见views/list.hbs)
     res.render('list', {
         username:username,
-        userid:userid
+        userid:userid,
+        headimgurl:headimgurl
     });
 });
 
@@ -207,20 +223,23 @@ router.get('/haishen/video', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var expertid = req.query.expertid;
+    var headimgurl = req.query.headimgurl;
 
-
-    username = replaceURIChar(username);
-    if(username == '' || userid == ''){
+    if(username == 'undefined' || typeof(userid) == 'undefined'){
         res.send("网页网址访问错误！");
         console.log("video网页网址访问错误！");
     }else{
+        username = replaceURIChar(username);
+        if(typeof(headimgurl) == "undefined") {
+            headimgurl = '';
+        }
         var json=JSON.parse(fs.readFileSync('./list.json'));
 
         var list = new Array();
         for(var i in json.video){
             if(json.video[i].expertid == expertid){
                 var room = json.video[i].room;
-                var url = "/haishen/room/"+room+"?username="+username+"&userid="+userid;
+                var url = "/haishen/room/"+room+"?username="+username+"&userid="+userid+"&headimgurl="+headimgurl;
                 var pic = "/assets/app/img/"+room+".jpg";
                 list.push({url:url,title:json.video[i].title,pic:pic});
             }
@@ -322,10 +341,42 @@ router.get('/haishen/wx', function (req, res) {
 //    });
 //});
 
-router.get('/haishen/test',function(req,res){
-    var userid = genUid();
-    var username = "游客"+userid;
-    res.redirect("/haishen/room/testroom?userid="+userid+"&username="+username);
+//router.get('/haishen/test',function(req,res){
+//    var userid = genUid();
+//    var username = "游客"+userid;
+//    res.redirect("/haishen/room/testroom?userid="+userid+"&username="+username);
+//});
+
+
+router.get('/haishen/admin', function (req, res) {
+    res.render("admin");
+});
+
+router.post('/haishen/auth', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    if(username == 'admin' & password == 'honor123'){
+        res.render("admin_delComments");
+    }else{
+        res.send('账号密码输入错误！');
+    }
+});
+
+router.post('/haishen/delComments', function (req, res) {
+    var roomID = req.body.roomID;
+    var commentID = req.body.commentID;
+    var success = delComments(roomID,commentID);
+    if( success == 1){
+        //给客户端发消息，删除界面上的评论内容
+        console.log(roomID);
+        io.to(roomID).emit("del",{commentid:commentID});
+        res.send("评论删除成功！");
+    }else if(success == 2){
+        res.send("房间号不存在，评论删除失败！")
+    }else{
+        res.send("评论号不存在，评论删除失败！");
+    }
+
 });
 
 //调用微信接口，获取用户昵称等信息
@@ -335,8 +386,10 @@ function renderList(access_token,openid,res,state){
         if (!error && response.statusCode == 200) {
             var data = JSON.parse(body);
             var nickname = data.nickname;
+            var headimgurl = data.headimgurl;
             if(typeof(data.nickname) == "undefined") {
                 nickname = "游客"+genUid();
+                headimgurl = '';
             }
             nickname = replaceURIChar(nickname);
             if(nickname == ''){
@@ -346,10 +399,11 @@ function renderList(access_token,openid,res,state){
                 if(state == 2) {//专家讲堂
                     res.render('list', {
                         username: nickname,
-                        userid: openid
+                        userid: openid,
+                        headimgurl:headimgurl
                     });
                 }else{//直播
-                    res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname);
+                    res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
                 }
             }
         } else {
@@ -382,8 +436,36 @@ function replaceURIChar(str){
     return str;
 }
 
-app.use('/', router);
 
+//删除某个房间的某条评论数据
+//调用方法http://XXX:3000/delComments/room001?id=xxxx&
+//room001为房间号
+//id为拟删除的评论编号
+function delComments(roomID,commentID){
+    var success = 0;
+    var id = '"'+commentID+'"';
+    var path ='./room/'+roomID+'.txt';
+    if (fs.existsSync(path)) {
+        var data = fs.readFileSync(path, 'utf8');
+        var lines = data.split("\n");
+        var len = lines.length -1;
+        for (var i = 0; i < len ; i++) {
+            var items = lines[i].split(',');
+            var item_id = items[2].split(":");
+            if (item_id[1] == id) {
+                lines.splice(i, 1);
+                success = 1;
+                fs.writeFileSync(path, lines.join('\n'), 'utf8');
+                break;
+            }
+        }
+    }else{
+        success = 2;
+    }
+    return success;
+}
+
+app.use('/', router);
 
 //监听浏览器3000端口访问
 http.listen(3000, function(){

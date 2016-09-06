@@ -19,9 +19,9 @@ function usernameSubmit(){
 	if(username != ""){
 		document.getElementById("username").value = '';
 		if(state == 1) {//直播
-			window.location = "/haishen/room/zhiboroom?username="+username+"&userid="+userid
+			window.location = "/haishen/room/zhiboroom?username="+username+"&userid="+userid+"&headimgurl="
 		}else{//专家讲堂
-			window.location = "/haishen/list?username=" + username + "&userid=" + userid
+			window.location = "/haishen/list?username=" + username + "&userid=" + userid +"&headimgurl="
 		}
 	}
 	return false;
@@ -33,9 +33,9 @@ function usernameSkip(){
 	var userid = this.genUid();
 	var username = "游客"+userid;
 	if(state == 1) {//直播
-		window.location = "/haishen/room/zhiboroom?username="+username+"&userid="+userid
+		window.location = "/haishen/room/zhiboroom?username="+username+"&userid="+userid+"&headimgurl="
 	}else{//专家讲堂
-		window.location = "/haishen/list?username=" + username + "&userid=" + userid
+		window.location = "/haishen/list?username=" + username + "&userid=" + userid +"&headimgurl="
 	}
 	return false;
 }

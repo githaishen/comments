@@ -14,9 +14,14 @@ username=decodeURI(username);
 
 var userid=getQueryString("userid");
 
+var headimgurl=getQueryString("headimgurl");
+if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
+	headimgurl = "/assets/app/img/head.jpg";
+}
+
 //连接websocket后端服务器
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
-//var socket= io.connect('ws://192.168.3.10:3000/haishen');
+//var socket= io.connect('ws://localhost:3000/haishen');
 //var socket= io.connect('ws://4k.evideocloud.com/haishen');
 
 //告诉服务器端有用户加入房间
@@ -32,6 +37,11 @@ socket.on('leave', function(o){
 	updateSysMsg(o, 'leave');
 });
 
+//监听删除评论
+socket.on('del', function(o){
+	msgObj.removeChild(document.getElementById(o.commentid));
+});
+
 //监听消息发送
 socket.on('message', function(obj){
 	var contentDiv = '<small style="font-size:130%">'+obj.content+'</small>';
@@ -39,7 +49,8 @@ socket.on('message', function(obj){
 	var usernameDiv = '<p style="font-size:130%">'+obj.username+'</p>';
 
 	var section = document.createElement('li');
-	section.innerHTML = "<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
+	section.id = obj.commentid;
+	section.innerHTML = "<div><img src ="+ obj.headimgurl+" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div><div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
 	msgObj.insertBefore(section,msgObj.childNodes[2]);
 });
 
@@ -50,7 +61,8 @@ function submit_msg(){
 		var obj = {
 			userid: userid,
 			username: username,
-			content: content
+			content: content,
+			headimgurl:headimgurl
 		};
 		socket.emit('message', obj);
 		document.getElementById("content").value = '';
@@ -75,12 +87,14 @@ function updateSysMsg(o, action){
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
 		for(var i= 0;i<o.room.length;i++){
+			var headimgurlDiv = "<div><img src ="+ o.room[i].headimgurl +" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div>";
 			var contentDiv = '<small style="font-size:130%">'+o.room[i].comment+'</small>';
 			var usernameDiv = '<p  style="font-size:130%">'+o.room[i].username+'</p>';
 			var timeDiv = '<small style="font-size:130%">'+o.room[i].times+'</small>';
 
 			var section = document.createElement('li');
-			section.innerHTML = "<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
+			section.id = o.room[i].commentid;
+			section.innerHTML = headimgurlDiv+"<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
 			msgObj.appendChild(section);
 		}
 	}

@@ -3,8 +3,9 @@ body {
   font-size: 16px;
   position: relative;
   /*background: url(/static/shikewall/images/bg_wood.jpg) 100%;*/
-  background: url(/static/images/bg.jpg) no-repeat scroll center 0px #030B22;
+  /*background: url(/static/images/bg.jpg) no-repeat scroll center 0px #030B22;*/
   /*background-attachment: fixed;*/
+  background: url(/assets/app/img/bg_night_sky.jpg)
 }
 .clearfix:after{
   clear: both;
@@ -14,15 +15,15 @@ body {
   visibility: hidden;
   line-height: 0;
 }
-.bg_christmas_red{
-  background: url(/assets/app/img/bg_christmas_red.jpg) no-repeat scroll center 0px #030B22;
-}
-.bg_china_newyear{
-  background: url(/assets/app/img/bg_china_newyear.jpg) no-repeat scroll center 0px #030B22;
-}
-.bg_night_sky{
-  background: url(/assets/app/img/bg_night_sky.jpg) no-repeat scroll center 0px #030B22;
-}
+/*.bg_christmas_red{*/
+  /*background: url(/assets/app/img/bg_christmas_red.jpg) no-repeat scroll center 0px #030B22;*/
+/*}*/
+/*.bg_china_newyear{*/
+  /*background: url(/assets/app/img/bg_china_newyear.jpg) no-repeat scroll center 0px #030B22;*/
+/*}*/
+/*.bg_night_sky{*/
+  /*background: url(/assets/app/img/bg_night_sky.jpg) scroll center 0px #030B22;*/
+/*}*/
 .wrapper{
   width: 1000px;
   height: auto;
@@ -32,7 +33,7 @@ body {
 }
 
 /*template_header*/
-#header,#main,#footerMenu{
+#header,#main{
   width: 960px;
   margin: 0 auto;
   position: relative;
@@ -67,25 +68,7 @@ body {
 }
 
 #main{
-  height: 540px;
+  /*height: 540px;*/
   margin-bottom: 10px;
   overflow: hidden;
-}
-
-#footerMenu{
-  height: 60px;
-}
-#footerMenu .logo{
-  width: 156px;height: 43px;
-  position: absolute;
-  left: 0;top: 50%;
-  margin-top: -22px;
-}
-#footerMenu #menu{
-  margin-top: 10px;
-  margin-left: 200px;
-}
-#menu li{
-  *display: inline;
-  display: inline-block;
 }

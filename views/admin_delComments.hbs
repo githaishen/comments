@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>电生理之家-评论管理</title>
+    <link rel="stylesheet" href="/assets/agile/css/agile.layout.css">
+    <link rel="stylesheet" href="/assets/third/seedsui/plugin/seedsui/seedsui.min.css">
+</head>
+<body>
+<div id="loginbox">
+    <div style="width:400px;margin:200px auto;">
+        请输入待删除评论的房间号和评论ID号：
+        <br/>
+        <br/>
+        <form method = "post" action="/haishen/delComments">
+            <input type="text" style="width:250px;" placeholder="房间号,如zhiboroom或room001"  name="roomID" />
+            <input type="text" style="width:250px;" placeholder="评论ID"  name="commentID" />
+            <input type="submit"  value="提交" />
+        </form>
+    </div>
+</div>
+</body>
+</html>
