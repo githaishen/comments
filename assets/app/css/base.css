@@ -5,7 +5,8 @@ body {
   /*background: url(/static/shikewall/images/bg_wood.jpg) 100%;*/
   /*background: url(/static/images/bg.jpg) no-repeat scroll center 0px #030B22;*/
   /*background-attachment: fixed;*/
-  background: url(/assets/app/img/bg_night_sky.jpg)
+ /* background: url(/assets/app/img/bg_night_sky.jpg)*/
+ background:url(../img/bgwall2.jpg) repeat;
 }
 .clearfix:after{
   clear: both;
@@ -38,10 +39,7 @@ body {
   margin: 0 auto;
   position: relative;
 }
-#header{
-  height: 120px;
-  margin-bottom: 10px;
-}
+
 /*#header .logo{*/
   /*position: absolute;*/
   /*left: 0;top: 50%;*/
@@ -58,9 +56,9 @@ body {
 #title h2{
   font-size: 30px;
 }
-#title .qrcode{
-  position: absolute;right: 0;top:10px;
-  width: 100px;height: 100px;
+ .qrcode{
+  position: relative;margin-left:50px;margin-top:40px;
+  width: 120px;height: 120px;
   z-index: 1000;
   box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.4) inset,
        0px 0px 15px rgba(0, 0, 0, 0.4);

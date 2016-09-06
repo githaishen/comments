@@ -7,7 +7,7 @@ $(document).ready(function(){
 	      $qrcode.animate({
 	        'width':'500px',
 	        'height':'500px',
-	        'right':'50%',
+	        
 	        'margin-top':'50px',
 	        'margin-right':'-250px',
 	        'z-index':'10086'
@@ -15,11 +15,11 @@ $(document).ready(function(){
 	    }
 	    else{
 	      $qrcode.animate({
-	        'width':'100px',
-	        'height':'100px',
-	        'right':'0',
-	        'margin-top':'0',
-	        'margin-right':'0',
+	        'width':'120px',
+	        'height':'120px',
+	        
+	        'margin-top':'40px',
+	        'margin-left':'50px',
 	        'z-index':'1000'
 	      },500);
 	    }

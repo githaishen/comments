@@ -3,9 +3,10 @@
 	/*list-style: none;*/
 	overflow: hidden;
 	margin-bottom: 10px;
-	background: #fff;
-	color: red;
+	background:#f3e86a;
+	color: #000;
 	position: relative;
+	
 }
 
 #wall .user-head,#wall .user-content{
@@ -40,3 +41,6 @@
 #wall p{
 	font-size: 30px;
 }
+
+#onlinecount{width:1000px; height:60px; background-color:#FFF; color:#000; line-height:60px; margin-bottom:10px;border-radius:10px; background:url(../img/gif.gif) no-repeat;}
+#header{ width:1000px; height:200px; background:url(../img/blackboard.jpg); margin:20px auto;box-shadow: 10px 10px 5px #666;}

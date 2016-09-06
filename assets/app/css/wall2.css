@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ margin:0; padding:0;}
+ul,li{ list-style-type:none;}
+body{width:1000px; background:url(../img/bgwall2.jpg) repeat; margin:0 auto;}
+#header{ width:1000px; height:200px; background:url(../img/blackboard.jpg); margin:20px auto;box-shadow: 10px 10px 5px #000;}
+#onlinecount{width:1000px; height:60px; background-color:#FFF; color:#000; line-height:60px;}
+.clearfix:after{
+  clear: both;
+  content: "";
+  display: block;
+  height: 0px;
+  visibility: hidden;
+  line-height: 0;
+}
+
+.user-head{
+	margin-top: 10px;margin-left: 20px; float:left;
+}
+#wall .user-head img{
+	width: 70px;height: 70px;
+	border-radius: 50%;
+}
+#wall .user-content{
+	margin: 10px 0 20px 20px;
+}
+#wall h1{
+	font-size: 30px;line-height: 38px;
+}
+#wall span{display: none;}
+#wall p{
+	font-size: 30px;
+}
+.qrcode{
+  position: relative;margin-left:50px;margin-top:20px;
+  width: 120px;height: 120px;
+  z-index: 1000;
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.4) inset,
+       0px 0px 15px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
