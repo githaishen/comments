@@ -43,4 +43,5 @@
 }
 
 #onlinecount{width:1000px; height:60px; background-color:#FFF; color:#000; line-height:60px; margin-bottom:10px;border-radius:10px; background:url(../img/gif.gif) no-repeat;}
-#header{ width:1000px; height:200px; background:url(../img/blackboard.jpg); margin:20px auto;box-shadow: 10px 10px 5px #666;}
+#onlinecount_fixed{width:1000px; height:60px; background-color:#FFF; color:#000; line-height:60px; margin-bottom:10px;border-radius:10px; background:url(../img/gif.gif) no-repeat;position:fixed; z-index:1; top:0;}
+#header{ width:1000px; height:200px; background:url(../img/blackboard.jpg); margin:0px auto 20px auto;box-shadow: 10px 10px 5px #666;z-index:2;}
