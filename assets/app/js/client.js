@@ -21,7 +21,7 @@ if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
 
 //连接websocket后端服务器
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
-//var socket= io.connect('ws://192.168.3.10:3000/haishen');
+//var socket= io.connect('ws://localhost:3000/haishen');
 //var socket= io.connect('ws://4k.evideocloud.com/haishen');
 
 //告诉服务器端有用户加入房间

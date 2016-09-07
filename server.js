@@ -10,6 +10,7 @@ var router = express.Router();
 var xss = require('xss');
 var moment = require('moment');
 var bodyParser = require('body-parser');
+var zlib = require("zlib");
 
 app.use('/assets', express.static('./assets/'));
 app.set('views', path.join(__dirname, 'views'));
@@ -58,23 +59,27 @@ io.on('connection', function(socket){
 
         //设置显示条数（最新的），具体做法：读取数据、分割为数据、删除前linenum-displaynum条、倒排序让最新的放到最前面
         var display_num = 300;
-        var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
-        var lines = txt.split("\n");
-        lines.pop();
-        var linenum = lines.length;
-        if(linenum > display_num){
-            lines.splice(0,linenum - display_num);
-        }
-        lines.reverse();
+        var path = './room/'+roomID+'.txt';
+        var txt = '';
+        if (fs.existsSync(path)) {
+            txt = fs.readFileSync(path, 'utf8');
+            var lines = txt.split("\n");
+            lines.pop();
+            var linenum = lines.length;
+            if (linenum > display_num) {
+                lines.splice(0, linenum - display_num);
+            }
+            lines.reverse();
 
-        //安全起见，获取的评论记录中删除userid信息后，再将commentid，username，comments和tims发送给前台
-        for(var i=0;i<lines.length;i++){
-            var items=lines[i].split(',');
-            items.shift();//删除第一个元素userid
-            items[0]='{'+items[0];//加上左括号
-            lines[i]=items.join(',');
+            //安全起见，获取的评论记录中删除userid信息后，再将commentid，username，comments和tims发送给前台
+            for (var i = 0; i < lines.length; i++) {
+                var items = lines[i].split(',');
+                items.shift();//删除第一个元素userid
+                items[0] = '{' + items[0];//加上左括号
+                lines[i] = items.join(',');
+            }
+            txt = lines.join('\n');
         }
-        txt=lines.join('\n');
 
         var json = JSON.parse('{"room": ['+txt.substr(0,txt.length-1)+']}');
         //console.log(roomInfo[roomID]);
@@ -259,31 +264,48 @@ router.get('/haishen/video', function (req, res) {
 router.get('/haishen/getComments/:roomID?', function (req, res) {
     var roomID = req.params.roomID;
     var num = req.query.num;
+    var path = './room/'+roomID+'.txt';
+    if (fs.existsSync(path)) {
+        var txt = fs.readFileSync(path, 'utf8');
+        var lines = txt.split("\n");
+        lines.pop();
 
-    var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
-    var lines = txt.split("\n");
-    lines.pop();
-
-    if(num > 0){
-        var linenum = lines.length;
-        if(linenum > num){
-            lines.splice(0,linenum - num);
+        if (num > 0) {
+            var linenum = lines.length;
+            if (linenum > num) {
+                lines.splice(0, linenum - num);
+            }
         }
+
+        //最新的评论放在最前面
+        lines.reverse();
+
+        txt = lines.join('\n');
+        var json = JSON.parse('{"' + roomID + '": [' + txt.substr(0, txt.length - 1) + ']}');
+        res.json(json);
+    }else{
+        res.send("评论数据不存在，清检查URL中房间号是否正确！");
     }
-
-    //最新的评论放在最前面
-    lines.reverse();
-
-    txt=lines.join('\n');
-    var json = JSON.parse('{"'+roomID+'": ['+txt.substr(0,txt.length-1)+']}');
-    res.json(json);
 });
 
 //获取某个房间的评论数据，以原文件格式返回
 router.get('/haishen/getCommentsFile/:roomID?', function (req, res) {
     var roomID = req.params.roomID;
-    var txt = fs.readFileSync('./room/'+roomID+'.txt', 'utf8');
-    res.send(txt);
+    var path = './room/'+roomID+'.txt';
+    if (fs.existsSync(path)) {
+        var raw = fs.createReadStream(path, {flags: "r", encoding: "utf8"});
+        raw.on("error", function (err) {
+            throw err;
+        });
+        res.writeHead(200, "Ok", {
+            'Content-Encoding': 'gzip',
+            'Content-Type': 'text/plain;charset=utf-8',
+            'Content-Disposition': 'attachment'
+        });
+        raw.pipe(zlib.createGzip()).pipe(res);
+    }else{
+        res.send("评论数据不存在,请检查URL中房间号是否正确！");
+    }
 });
 
 //显示index页面，目前是让用户输入昵称或选择跳过，系统自动分配游客名称给用户
@@ -466,6 +488,10 @@ function delComments(roomID,commentID){
 }
 
 app.use('/', router);
+
+http.on("error", function(error) {
+    console.log(error);
+});
 
 //监听浏览器3000端口访问
 http.listen(3000, function(){
