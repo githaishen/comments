@@ -103,7 +103,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('hi', function () {
-        console.log("test");
+        
     });
 
     //监听用户退出
