@@ -93,7 +93,7 @@ function updateSysMsg(o, action){
 
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
-		msgObj.innerHTML="";
+		//msgObj.innerHTML="";
 		for(var i= 0;i<o.room.length;i++){
 			var headimgurlDiv = "<div><img src ="+ o.room[i].headimgurl +" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div>";
 			var contentDiv = '<small style="font-size:130%">'+o.room[i].comment+'</small>';

@@ -54,7 +54,10 @@ function updateSysMsg(o, action){
 	document.getElementById("onlinecount").innerHTML = '<h1 style="float:left;font-weight:bold;">&nbsp;直&nbsp;播&nbsp;留&nbsp;言&nbsp;板&nbsp;</h1><sppan style=" font-size:14px; color:#708090;"> 当前共有'+roomCount+' 人在线</span>';
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
-		msgObj.innerHTML = "";
+		//msgObj.innerHTML = "";
+		var welcome = document.createElement('li');
+		welcome.innerHTML = ""
+
 		for(var i= 0;i<o.room.length;i++){
 			var contentDiv = '<h1>'+o.room[i].comment+'</h1>';
 			var user_timeDiv = '<h2>'+o.room[i].username+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+o.room[i].times+'</h2>';
