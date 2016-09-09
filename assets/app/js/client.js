@@ -11,6 +11,10 @@ function getroomID(){
 	return splited2[splited2.length - 1];
 }
 
+function sendPing(s){
+	s.emit('hi',{});
+}
+
 var msgObj=document.getElementById("message");
 //utf-8转换为中文，解决昵称中有中文，防止出现乱码
 var username = escape(getQueryString("username"));
@@ -31,8 +35,17 @@ if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
 //连接websocket后端服务器
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
 
+socket.on('connect',function(){
+	socket.emit('join',  {userid:userid, username:username,roomID:roomID});
+	setInterval('sendPing(socket)',60000);
+});
+
+socket.on('disconnect',function(){
+	socket.socket.reconnect();
+});
+
 //告诉服务器端有用户加入房间
-socket.emit('join',  {userid:userid, username:username,roomID:roomID});
+//socket.emit('join',  {userid:userid, username:username,roomID:roomID});
 
 //监听新用户登录
 socket.on('join', function(o){
@@ -58,7 +71,7 @@ socket.on('message', function(obj){
 	var section = document.createElement('li');
 	section.id = obj.commentid;
 	section.innerHTML = "<div><img src ="+ obj.headimgurl+" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div><div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
-	msgObj.insertBefore(section,msgObj.childNodes[2]);
+	msgObj.insertBefore(section,msgObj.childNodes[1]);
 });
 
 //提交聊天消息内容
@@ -93,14 +106,17 @@ function updateSysMsg(o, action){
 
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
-		//msgObj.innerHTML="";
+		msgObj.innerHTML="";
+		var section = document.createElement('li');
+		section.innerHTML = '<div class="justify-content"><p style="font-size:130%">Welcome</p><small style="font-size:130%">欢迎您参与评论。</small></div>';
+		msgObj.appendChild(section);
 		for(var i= 0;i<o.room.length;i++){
 			var headimgurlDiv = "<div><img src ="+ o.room[i].headimgurl +" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div>";
 			var contentDiv = '<small style="font-size:130%">'+o.room[i].comment+'</small>';
 			var usernameDiv = '<p  style="font-size:130%">'+o.room[i].username+'</p>';
 			var timeDiv = '<small style="font-size:130%">'+o.room[i].times+'</small>';
 
-			var section = document.createElement('li');
+			section = document.createElement('li');
 			section.id = o.room[i].commentid;
 			section.innerHTML = headimgurlDiv+"<div class='justify-content'>"+usernameDiv + timeDiv + contentDiv+"</div>";
 			msgObj.appendChild(section);

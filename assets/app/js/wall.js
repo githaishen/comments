@@ -8,10 +8,13 @@ function genUid(){
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
 //var socket= io.connect('ws://localhost:3000/haishen',{"transports":[ 'polling']});
 //var socket= io.connect('ws://4k.evideocloud.com/haishen',{"transports":[ 'polling']});
+//var socket = io.connect("ws://localhost:3000/haishen");
 var userid = genUid();
 var username = "admin"+userid;
 
-socket.emit('join',  {userid:userid, username:username,roomID:'zhiboroom'});
+socket.on('connect',function(){
+	socket.emit('join',  {userid:userid, username:username,roomID:'zhiboroom'});
+});
 
 //监听新用户登录
 socket.on('join', function(o){
@@ -36,7 +39,7 @@ socket.on('message', function(obj){
 	var section = document.createElement('li');
 	section.id = obj.commentid;
 	section.innerHTML = "<img src = '/assets/app/img/tuding.jpg' /><div class='user-head'><img src ="+ obj.headimgurl +" alt=''/></div><div class='user-content'><div>"+user_timeDiv + contentDiv+"</div></div>";
-	msgObj.insertBefore(section,msgObj.childNodes[1]);
+	msgObj.insertBefore(section,msgObj.childNodes[0]);
 });
 
 
@@ -54,7 +57,7 @@ function updateSysMsg(o, action){
 	document.getElementById("onlinecount").innerHTML = '<h1 style="float:left;font-weight:bold;">&nbsp;直&nbsp;播&nbsp;留&nbsp;言&nbsp;板&nbsp;</h1><sppan style=" font-size:14px; color:#708090;"> 当前共有'+roomCount+' 人在线</span>';
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
-		//msgObj.innerHTML = "";
+		msgObj.innerHTML = "";
 		var welcome = document.createElement('li');
 		welcome.innerHTML = ""
 

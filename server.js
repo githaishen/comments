@@ -102,6 +102,10 @@ io.on('connection', function(socket){
         socket.emit('disconnect');
     });
 
+    socket.on('hi', function () {
+        console.log("test");
+    });
+
     //监听用户退出
     socket.on('disconnect', function(){
         //将退出的用户从在线列表中删除
