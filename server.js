@@ -2,8 +2,7 @@
 var app = express();
 var http = require('http').Server(app);
 var ios = require('socket.io')(http,{
-    "serveClient": false ,
-    "transports":['polling','websocket']
+    "transports":['polling']
 });
 //var ios = require('socket.io')(http);
 var io = ios.of('/haishen');
