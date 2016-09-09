@@ -1,7 +1,11 @@
 ﻿const express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var ios = require('socket.io')(http);
+var ios = require('socket.io')(http,{
+    "serveClient": false ,
+    "transports":['polling','websocket']
+});
+//var ios = require('socket.io')(http);
 var io = ios.of('/haishen');
 var request = require('request');
 const fs = require("fs");
@@ -20,6 +24,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 ////解析json格式的body，否则POST json 数据时 body为空
 //app.use(bodyParser.json());
 
+var roomtxt = fs.readFileSync("./room.txt", 'utf8');
+roomtxt = roomtxt.replace(/\r/g,'');
+var rooms = roomtxt.split("\n");
+
 // 房间用户名单
 var roomInfo = {};
 
@@ -29,40 +37,35 @@ var onlineUsers = {};
 var onlineCount = 0;
 
 io.on('connection', function(socket){
-    var url = socket.request.headers.referer;
-    var splited = url.split('?');
-    var splited2 = splited[0].split('/');
-    var roomID = splited2[splited2.length-1];   // 获取房间ID,类似room001
-
-    if(roomID == "wall"){
-        roomID = "zhiboroom";
-    }
+    var roomID = '';
 
     socket.on('join', function (obj) {
 
         socket.name = obj.userid;
 
-        //检查在线列表，如果不在里面就加入
-        if(!onlineUsers.hasOwnProperty(obj.userid)) {
-            onlineUsers[obj.userid] = obj.username;
-            //在线人数+1
-            onlineCount++;
-        }
+        roomID = obj.roomID;
 
-        // 将用户昵称加入房间名单中
-        if (!roomInfo[roomID]) {
-            roomInfo[roomID] = [];
-        }
-        roomInfo[roomID].push(obj.userid);
+        if (rooms.indexOf(roomID) != -1) {
 
-        socket.join(roomID);    // 加入房间
+            //检查在线列表，如果不在里面就加入
+            if(!onlineUsers.hasOwnProperty(obj.userid)) {
+                onlineUsers[obj.userid] = obj.username;
+                //在线人数+1
+                onlineCount++;
+            }
 
-        //设置显示条数（最新的），具体做法：读取数据、分割为数据、删除前linenum-displaynum条、倒排序让最新的放到最前面
-        var display_num = 300;
-        var path = './room/'+roomID+'.txt';
-        var txt = '';
-        if (fs.existsSync(path)) {
-            txt = fs.readFileSync(path, 'utf8');
+            // 将用户昵称加入房间名单中
+            if (!roomInfo[roomID]) {
+                roomInfo[roomID] = [];
+            }
+            roomInfo[roomID].push(obj.userid);
+
+            socket.join(roomID);    // 加入房间
+
+            //设置显示条数（最新的），具体做法：读取数据、分割为数据、删除前linenum-displaynum条、倒排序让最新的放到最前面
+            var display_num = 300;
+
+            var txt = fs.readFileSync( './room/'+roomID+'.txt', 'utf8');
             var lines = txt.split("\n");
             lines.pop();
             var linenum = lines.length;
@@ -79,20 +82,21 @@ io.on('connection', function(socket){
                 lines[i] = items.join(',');
             }
             txt = lines.join('\n');
+
+            var json = JSON.parse('{"room": ['+txt.substr(0,txt.length-1)+']}');
+            //console.log(roomInfo[roomID]);
+            //var msg = Object.assign({onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj, roomCount:roomInfo[roomID].length},json);
+
+            var msg = Object.assign({user:obj, roomCount:roomInfo[roomID].length},json);
+
+            //向房间所有客户端广播用户加入
+            //io.emit('login', {onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj});
+            io.to(roomID).emit('join', msg);
+
+            // 后台日志显示
+            console.log(obj.username + '加入了' + roomID+"房间");
         }
-
-        var json = JSON.parse('{"room": ['+txt.substr(0,txt.length-1)+']}');
-        //console.log(roomInfo[roomID]);
-        //var msg = Object.assign({onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj, roomCount:roomInfo[roomID].length},json);
-
-        var msg = Object.assign({user:obj, roomCount:roomInfo[roomID].length},json);
-
-        //向房间所有客户端广播用户加入
-        //io.emit('login', {onlineUsers:onlineUsers, onlineCount:onlineCount, user:obj});
-        io.to(roomID).emit('join', msg);
-
-        // 后台日志显示
-        console.log(obj.username + '加入了' + roomID+"房间");
+        //可根据情况处理聊天室不存在的错误，此处不做任何处理
     });
 
     socket.on('leave', function () {
@@ -129,35 +133,31 @@ io.on('connection', function(socket){
 
     //监听用户发布聊天内容
     socket.on('message', function(obj){
+        if (rooms.indexOf(roomID) != -1) {
+            //moment.locale('zh-cn');
+            //var curTime = moment().format('YYYY-MM-DD HH:mm:ss');//操作系统如果设置了北京时间，采用这种获取时间方法
+            var curTime = moment().add(8,'h').format('YYYY-MM-DD HH:mm:ss');//目前daocloud主机时间是格林威治时间，北京在东8区，增加8小时
+            var commentid = genUid();
 
-        //moment.locale('zh-cn');
-        //var curTime = moment().format('YYYY-MM-DD HH:mm:ss');//操作系统如果设置了北京时间，采用这种获取时间方法
-        var curTime = moment().add(8,'h').format('YYYY-MM-DD HH:mm:ss');//目前daocloud主机时间是格林威治时间，北京在东8区，增加8小时
-        var commentid = genUid();
+            //向所有客户端广播发布的消息,加入当前时间
+            io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,commentid:commentid,content:obj.content,times:curTime,headimgurl:obj.headimgurl});
 
-        //向所有客户端广播发布的消息,加入当前时间
-        io.to(roomID).emit('message', {userid:obj.userid, username:obj.username,commentid:commentid,content:obj.content,times:curTime,headimgurl:obj.headimgurl});
+            //防止xss攻击，去掉HTML标签
+            var  filterHtml= xss(obj.content, {
+                whiteList:          [],        // 白名单为空，表示过滤所有标签
+                stripIgnoreTag:     true,      // 过滤所有非白名单标签的HTML
+                stripIgnoreTagBody: ['script'] // script标签较特殊，需要过滤标签中间的内容
+            });
 
-        //防止xss攻击，去掉HTML标签
-        var  filterHtml= xss(obj.content, {
-            whiteList:          [],        // 白名单为空，表示过滤所有标签
-            stripIgnoreTag:     true,      // 过滤所有非白名单标签的HTML
-            stripIgnoreTagBody: ['script'] // script标签较特殊，需要过滤标签中间的内容
-        });
+            //替换双引号（系统日志文件总以双引号分割）
+            var REGEXP_QUOTE = /"/g;
+            var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
+            fs.appendFileSync( './room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","commentid":"'+commentid+'","comment":"'+filterMsg+'","headimgurl":"'+obj.headimgurl+'","times":"'+curTime+'"},\n');
 
-        //替换双引号（系统日志文件总以双引号分割）
-        var REGEXP_QUOTE = /"/g;
-        var filterMsg = filterHtml.replace(REGEXP_QUOTE,'&quot;');
-        fs.appendFileSync('./room/'+roomID+'.txt','{"userid":"'+obj.userid+'","username":"'+obj.username+'","commentid":"'+commentid+'","comment":"'+filterMsg+'","headimgurl":"'+obj.headimgurl+'","times":"'+curTime+'"},\n');
-
-        //后台日志显示
-        console.log(obj.username+'说：'+filterMsg);
+            //后台日志显示
+            console.log(obj.username+'说：'+filterMsg);
+        }
     });
-
-    ////监听删除评论消息
-    //socket.on('del', function(obj) {
-    //    io.to(obj.roomID).emit("del",{commentid:obj.commentid});
-    //});
 });
 
 // room page
@@ -165,6 +165,9 @@ router.get('/haishen/room/:roomID?', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var roomID = req.params.roomID;
+    if(roomID == 'undefined'){//某些时候回出现，可能和浏览器缓存有关
+        return;
+    }
 
     if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
         res.send("网页网址访问错误！");
@@ -202,7 +205,6 @@ router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
     var headimgurl = req.query.headimgurl;
-    console.log(username);
 
     if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
         res.send("网页网址访问错误！");
@@ -390,7 +392,6 @@ router.post('/haishen/delComments', function (req, res) {
     var success = delComments(roomID,commentID);
     if( success == 1){
         //给客户端发消息，删除界面上的评论内容
-        console.log(roomID);
         io.to(roomID).emit("del",{commentid:commentID});
         res.send("评论删除成功！");
     }else if(success == 2){

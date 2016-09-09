@@ -4,6 +4,13 @@ function getQueryString(name){
 	if (r != null) return unescape(r[2]); return null;
 }
 
+function getroomID(){
+	var url = window.location.href;
+	var splited = url.split('?');
+	var splited2 = splited[0].split('/');
+	return splited2[splited2.length - 1];
+}
+
 var msgObj=document.getElementById("message");
 //utf-8转换为中文，解决昵称中有中文，防止出现乱码
 var username = escape(getQueryString("username"));
@@ -11,6 +18,8 @@ username = username.replace(/%26/g,'&');
 username = username.replace(/%3F/g,'?');
 username = username.replace(/%3D/g,'=');
 username=decodeURI(username);
+
+var roomID = getroomID();
 
 var userid=getQueryString("userid");
 
@@ -20,12 +29,11 @@ if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
 }
 
 //连接websocket后端服务器
-var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
-//var socket= io.connect('ws://localhost:3000/haishen');
-//var socket= io.connect('ws://4k.evideocloud.com/haishen');
+var socket = io.connect('ws://haishen-comments.daoapp.io/haishen',{"transports":[ 'polling']});
+//var socket= io.connect('ws://localhost:3000/haishen',{"transports":[ 'polling']});
 
 //告诉服务器端有用户加入房间
-socket.emit('join',  {userid:userid, username:username});
+socket.emit('join',  {userid:userid, username:username,roomID:roomID});
 
 //监听新用户登录
 socket.on('join', function(o){
@@ -86,6 +94,7 @@ function updateSysMsg(o, action){
 
 	//如果是新加入的用户，显示最近几条信息
 	if(user.username == username){
+		msgObj.innerHTML="";
 		for(var i= 0;i<o.room.length;i++){
 			var headimgurlDiv = "<div><img src ="+ o.room[i].headimgurl +" style='height:50px;margin-top: 25px;margin-left: 25px;border-radius: 50%;' alt=''/></div>";
 			var contentDiv = '<small style="font-size:130%">'+o.room[i].comment+'</small>';

@@ -5,13 +5,13 @@ function genUid(){
 }
 
 //连接websocket后端服务器
-var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
-//var socket= io.connect('ws://localhost:3000/haishen');
-//var socket= io.connect('ws://4k.evideocloud.com/haishen');
+var socket = io.connect('ws://haishen-comments.daoapp.io/haishen',{"transports":[ 'polling']});
+//var socket= io.connect('ws://localhost:3000/haishen',{"transports":[ 'polling']});
+//var socket= io.connect('ws://4k.evideocloud.com/haishen',{"transports":[ 'polling']});
 var userid = genUid();
 var username = "admin"+userid;
 
-socket.emit('join',  {userid:userid, username:username});
+socket.emit('join',  {userid:userid, username:username,roomID:'zhiboroom'});
 
 //监听新用户登录
 socket.on('join', function(o){
