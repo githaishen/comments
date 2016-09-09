@@ -1,10 +1,10 @@
 ﻿const express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var ios = require('socket.io')(http,{
-    "transports":['polling']
-});
-//var ios = require('socket.io')(http);
+//var ios = require('socket.io')(http,{
+//    "transports":['polling']
+//});
+var ios = require('socket.io')(http);
 var io = ios.of('/haishen');
 var request = require('request');
 const fs = require("fs");

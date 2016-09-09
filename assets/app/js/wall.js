@@ -5,7 +5,7 @@ function genUid(){
 }
 
 //连接websocket后端服务器
-var socket = io.connect('ws://haishen-comments.daoapp.io/haishen',{"transports":[ 'polling']});
+var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
 //var socket= io.connect('ws://localhost:3000/haishen',{"transports":[ 'polling']});
 //var socket= io.connect('ws://4k.evideocloud.com/haishen',{"transports":[ 'polling']});
 var userid = genUid();
