@@ -1,2 +1,0 @@
-{"userid":"ogwnZwMqL4kXpxMsTp34f6XrkZKQ","username":"ZJn&ame","commentid":"1473412599172288","comment":"期待啊","headimgurl":"http://wx.qlogo.cn/mmopen/wTAXeaUSib0CiaYTLicxjOiaiaqEsoMVB1MIpLtHpQ7H30lHCicvzQW0ggiacznawyWWsRw1XD7Jr9mfEKncLP9fJcOpGAX1Jia4yBDM/0","times":"2016-09-09 17:16:39"},
-{"userid":"ogwnZwJds4XKozMe5Mvl0-i7bZnw","username":"panwy","commentid":"1473424865555318","comment":"3G用户可选择流畅模式观看","headimgurl":"http://wx.qlogo.cn/mmopen/PiajxSqBRaEKicYo33jhkxaFiccIGibfqHO5ia1b7F1JEKtGxibdzxt5ADDfy3Ie67GgghywgxgTribPg7p0rQudgsM8g/0","times":"2016-09-09 20:41:05"},
