@@ -34,6 +34,7 @@ if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
 
 //连接websocket后端服务器
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
+//var socket = io.connect('ws://192.168.3.7:3000/haishen');
 
 socket.on('connect',function(){
 	socket.emit('join',  {userid:userid, username:username,roomID:roomID});

@@ -428,8 +428,20 @@ function renderList(access_token,openid,res,state){
                         userid: openid,
                         headimgurl:headimgurl
                     });
+					
+
+			
+				
+			
                 }else{//直播
+					if(state == 1) {
                     res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
+					}else{//手机拍摄
+						if(state == 3) {
+                    	res.redirect("/haishen/room/zhiboroom2?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
+						}
+					}
+					
                 }
             }
         } else {
