@@ -262,6 +262,53 @@ router.get('/haishen/video', function (req, res) {
     }
 });
 
+
+						router.get('/haishen/live', function (req, res) {
+							var username = req.query.username;
+							var userid = req.query.userid;
+							var headimgurl = req.query.headimgurl;
+						
+							if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
+								res.send("网页网址访问错误！");
+								console.log("list网页网址访问错误！");
+								return;
+							}
+						
+							if(typeof(headimgurl) == "undefined") {
+								headimgurl = '';
+							}
+						
+							// 渲染页面数据(见views/live.hbs)
+							res.render('live', {
+								username:username,
+								userid:userid,
+								headimgurl:headimgurl
+							});
+						});
+
+						router.get('/haishen/live2', function (req, res) {
+							var username = req.query.username;
+							var userid = req.query.userid;
+							var headimgurl = req.query.headimgurl;
+						
+							if(typeof(username) == 'undefined' || typeof(userid) == 'undefined'){
+								res.send("网页网址访问错误！");
+								console.log("list网页网址访问错误！");
+								return;
+							}
+						
+							if(typeof(headimgurl) == "undefined") {
+								headimgurl = '';
+							}
+						
+							// 渲染页面数据(见views/live2.hbs)
+							res.render('live2', {
+								username:username,
+								userid:userid,
+								headimgurl:headimgurl
+							});
+						});
+
 //获取某个房间的评论数据，以json格式返回
 //调用方法http://XXX:3000/getComments/room001?num=10
 //room001为房间号
@@ -435,10 +482,10 @@ function renderList(access_token,openid,res,state){
 			
                 }else{//直播
 					if(state == 1) {
-                    res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
+                    res.redirect("/haishen/live2?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
 					}else{//手机拍摄
 						if(state == 3) {
-                    	res.redirect("/haishen/room/zhiboroom2?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
+                    	res.redirect("/haishen/live?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
 						}
 					}
 					
