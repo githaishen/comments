@@ -47,11 +47,11 @@
             <header>
 				
                 <h2>敬请收看：</h2>
-                <!--
+                
 				<a href="javascript:changeh();"> <div id="high" style="background-color: #000;float:right ;  width:30px ; height:20px ; color:#FFF; 		font-size:9px; margin:5px 5px 0 5px;border-radius:4px; text-align:center; line-height:20px; border-color:#000;display:none;"><h2>高清</h2></div></a>
                  
                	<a href="javascript:changel();"> <div id="low" style="background-color: #ccc;float:right ;  width:30px ; height:20px ; color:#FFF; font-size:9px; margin:5px 5px 0 5px;border-radius:4px; text-align:center; line-height:20px; border-color:#000;display:none;"><h2>流畅</h2></div></a>
-                -->
+                
                 <div style="background:#000;text-align:center;margin:0 auto;">
                     <video id="vi" src="{{vurl}}"  controls="" poster="{{poster}}" height="362" loop="loop"></video>
                 </div>
@@ -103,7 +103,7 @@
 </body>
 	<script>
 		var strHref = window.document.location.href; 
-		var key = strHref.indexOf("zhibo");
+		var key = strHref.indexOf("zhiboroom?");
 		function MyAutoRun()
 		{
 			if(key != -1){
@@ -141,7 +141,7 @@
 		document.getElementById('low').style.backgroundColor = '#000';
 		
 		document.getElementById('high').style.backgroundColor = '#ccc';
-		document.getElementById('vi').src = 'http://live1.evideocloud.net/live/haishen__r11BeJYKWqyK/playlist.m3u8';
+		document.getElementById('vi').src = 'http://live.evideocloud.net/live/haishen__r11BeJYKWqyK/haishen__r11BeJYKWqyK.m3u8';
 		document.getElementById("vi").load();
 		console.log(document.getElementById('vi').src);
 	} else {
