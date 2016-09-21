@@ -3,10 +3,13 @@
 
 *{ margin:0; padding:0;}
 body{margin:0 auto;}
-.bar{margin:0 auto; text-align:center;line-height:50px;}
-.bar p{font-family:"黑体"; font-weight:bolder; font-size:24px;}
-.adv,.live{ margin:0 auto; display:block;font-family:"黑体"; margin-bottom:20px;}
-img{ width:100%;}
+.bar{ background-color:#CCC;}
+.bar img{width:100%;}
+.top{ width:100%; background-color:#CCC; text-align:center;}
+.top p{ font-size:1em; line-height:2em; font-family:"黑体";}
+ul,li{ list-style:none; list-style-type:none;}
+li{width:100%;}
+li img{ float:left; width:112px; height:85px; margin:0.5em;}
+li h2{font-size:1em; font-family:"黑体"; line-height:2em;}
+li p{ font-size:0.8em; color:#999;}
 a{ text-decoration:none; color:#000;}
-.bottom{ position:absolute; bottom:0; background-color:#d6d6d8; display:block; width:100%; height:50px;margin:0 auto;}
-.bottom img{ float:left;height:50px;width:21%;display:block; margin:0 6%;}
