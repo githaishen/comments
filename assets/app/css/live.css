@@ -10,6 +10,6 @@ body{margin:0 auto;}
 ul,li{ list-style:none; list-style-type:none;}
 li{width:100%;}
 li img{ float:left; width:112px; height:85px; margin:0.5em;}
-li h2{font-size:1em; font-family:"黑体"; line-height:2em;}
+li h2{font-size:1em; font-family:"黑体";}
 li p{ font-size:0.8em; color:#999;}
 a{ text-decoration:none; color:#000;}

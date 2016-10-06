@@ -13,28 +13,19 @@
 </head>
 <body>
     <div class="bar">
-        <img src="../assets/app/img/banner.jpg">
+        <a href="/haishen/room/advroom?username={{username}}&userid={{userid}}&expertid=100&headimgurl={{headimgurl}}"><img src="../assets/app/img/banner.jpg"></a>
     </div>
 	<div class="top">
-		<p>中华医学会第十九次全国神经病学学术会议</p>
+		<p>欢迎来到电生理之家</p>
 	</div>
 	<ul>
-		<li>
-			<a href="/haishen/room/advroom?username={{username}}&userid={{userid}}&expertid=100&headimgurl={{headimgurl}}">
-			
-					<img src="../assets/app/img/adv.jpg">
-					<h2>名师风采</h2>
-					<p>电生理之家历届直播回顾，近距离感受大师们的风采。</p>
-				
-			</a>
-			<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-		</li>
+
 		<li>
 			<a href="/haishen/room/zhiboroom2?username={{username}}&userid={{userid}}&expertid=100&headimgurl={{headimgurl}}">
 				
 					<img src="../assets/app/img/livephone.jpg">
-					<h2>走马观花</h2>
-					<p>跟着小编一起游览会场内外，看看都有哪些好玩的好看的！</p>
+					<h2>2016华夏神经病学论坛暨第二届中国医疗保健国际交流促进会神经病学年会</h2>
+					<div id="countdown1" style="font-size:0.8em; color:#999;"></div>
 				
 			</a>
 			<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
@@ -43,12 +34,32 @@
 			<a href="/haishen/room/zhiboroom?username={{username}}&userid={{userid}}&expertid=100&headimgurl={{headimgurl}}">
 				
 					<img src="../assets/app/img/live.jpg">
-					<h2>会议直播</h2>
-					<p>敬请期待……</p>
+					<h2>第五届CAAE脑电图与神经电生理大会</h2>
+					<div id="countdown2" style="font-size:0.8em; color:#999;"></div>
 				
 			</a>
 			<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
 		</li>
-	
+	</ul>
 </body>
+<!--        倒           计            时          -->
+ <script type="text/javascript">
+	var interval = 1000; 
+	function ShowCountDown(year,month,day,hour,divname) 
+	{ 
+	var now = new Date(); 
+	var endDate = new Date(year, month-1, day, hour); 
+	var leftTime=endDate.getTime()-now.getTime(); 
+	var leftsecond = parseInt(leftTime/1000); 
+	var day1=Math.floor(leftsecond/(60*60*24)); 
+	var hour1=Math.floor((leftsecond-day1*24*60*60)/3600); 
+	var minute=Math.floor((leftsecond-day1*24*60*60-hour1*3600)/60); 
+	var second=Math.floor(leftsecond-day1*24*60*60-hour1*3600-minute*60); 
+	var cc = document.getElementById(divname); 
+	cc.innerHTML = "距直播开始还有："+day1+"天"+hour1+"小时"+minute+"分"+second+"秒"; 
+	} 
+	window.setInterval(function(){ShowCountDown(2016,11,4,8,'countdown1');}, interval); 
+	window.setInterval(function(){ShowCountDown(2016,10,21,8,'countdown2');}, interval);
+</script> 
+
 </html>
