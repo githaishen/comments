@@ -5,3 +5,4 @@ room001
 room002
 testroom
 room003
+beijingroom

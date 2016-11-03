@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="/assets/agile/css/agile.layout.css">
     <link rel="stylesheet" href="/assets/third/seedsui/plugin/seedsui/seedsui.min.css">
     <script type="text/javascript" src="/assets/app/js/stat.js"></script>
-
+	<link rel="stylesheet" href="/assets/app/js/beijing.css">
 </head>
 <body>
 <div id="chatbox">
@@ -67,7 +67,7 @@
                         <div id="onlinecount" style="font-size:130%;"></div>
 						
                     </summary>
-                    <ul class="list" id="message">
+                    <ul class="list" id="message" style="display:none;">
                         <li>
                             <div class="justify-content">
                                 <p style="font-size:130%">Welcome</p>
@@ -75,23 +75,29 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="list" id="qr">
+                    <ul class="list" id="qr" style="display:none;">
                         <li>
-                            <div class="justify-content">
+                            <div class="justify-content" >
                                 <img src="/assets/app/img/qr.jpg" alt="" style="width:156px;height:auto;display:block;margin:0 auto;">
                             </div>
                         </li>
                     </ul>
+					<div id = "introduction">
+						<h2>2016华夏神经病学论坛暨第二届中国医疗保健国际交流促进会神经病学年会</h2>
+						<img src="/assets/app/img/meeting.jpg">
+						<p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp电生理之家在11月4日至6日，每天早8点准时为您视频直播。本次直播的论坛将围绕当前神经病学领域的热点问题进行深入研讨，将分为癫痫、脑血管病、护理、中西医结合、周围神经肌肉病、神经免疫与脊髓病、神经重症、帕金森病、认知障碍、睡眠障碍和心身疾病等多个板块进行学术交流，还将邀请国内外著名专家作专题报告和讲座，并开展论文交流、分组讨论、专家面对面病例解析等形式多样、内容丰富的学术活动。</p>
+					
+					</div>
                 </details>
             </div>
             </article>
             <footer>
-                <div class="input-box">
+                <div class="input-box" style="display:none;">
                     <i class="color-placeholder icon icon-chatdot-fill"></i>
                     <input type="text" placeholder="我来说两句" maxlength="140" name="content" id="content"  style="font-size:130%;height:130%">
                     <button class="radius4" onclick="submit_msg();">发送</button>
                 </div>
-            </footer>
+            </footer>     
         </section>
     </div>
 </div>
@@ -103,18 +109,20 @@
 </body>
 	<script>
 		var strHref = window.document.location.href; 
-		var key = strHref.indexOf("zhiboroom?");
+		var key = strHref.indexOf("beijingroom?");
 		function MyAutoRun()
 		{
 			if(key != -1){
 				document.getElementById('high').style.display = 'block';
 				document.getElementById('low').style.display = 'block';
-				document.getElementById('countdown').style.display = 'block';
+				
+				document.getElementById('introduction').style.display = 'block';
 				} else {
 					console.log(key);
 					}
 		}
 		console.log(document.getElementById('vi').src);
+		console.log(document.getElementById('introduction').style.display);
 		window.onload=MyAutoRun();
 	</script>
 	 <!--切换画质按钮事件-->
@@ -149,7 +157,7 @@
 	}
 	 }
  </script>
- <!--        倒           计            时          -->
+ <!--        倒           计            时        
 <script>
 	var interval = 1000; 
 	function ShowCountDown(year,month,day,hour,divname) 
@@ -166,5 +174,5 @@
 	cc.innerHTML = "西安神经电生理学习班倒计时："+day1+"天"+hour1+"小时"+minute+"分"+second+"秒"; 
 	} 
 	window.setInterval(function(){ShowCountDown(2016,9,10,8,'countdown');}, interval); 
-</script> 
+</script> -->
 </html>

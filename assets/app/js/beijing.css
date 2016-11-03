@@ -1,0 +1,7 @@
+@charset "utf-8";
+/* CSS Document */
+
+#introduction{ display:none; margin:0.5em;}
+#introduction h2{text-align:center;}
+#introduction img{width:324px; height:216px; float:left; margin:0.5em;}
+#introduction p{}
