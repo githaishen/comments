@@ -34,7 +34,7 @@ if(typeof(headimgurl) == 'undefined' || headimgurl == ''){
 
 //连接websocket后端服务器
 var socket = io.connect('ws://haishen-comments.daoapp.io/haishen');
-//var socket = io.connect('ws://192.168.0.102:3000/haishen');
+//var socket = io.connect('ws://192.168.3.6:3000/haishen');
 
 socket.on('connect',function(){
 	socket.emit('join',  {userid:userid, username:username,roomID:roomID});
@@ -101,7 +101,7 @@ function updateSysMsg(o, action){
 	//新加入用户的信息
 	var user = o.user;
 
-	var roomCount = o.roomCount + 100;//增加100基数
+	var roomCount = o.roomCount;//增加100基数
 
 	document.getElementById("onlinecount").innerHTML = '当前共有 '+roomCount+' 人在线';
 
