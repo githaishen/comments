@@ -1,8 +1,6 @@
 zhiboroom
-zhiboroom2
 advroom
 room001
 room002
-testroom
 room003
-beijingroom
+classroom001

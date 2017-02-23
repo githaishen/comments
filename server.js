@@ -464,8 +464,8 @@ function renderList(access_token,openid,res,state){
 					if(state == 1) {
                     res.redirect("/haishen/live?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
 					}else{//手机拍摄
-						if(state == 3) {
-                    	res.redirect("/haishen/room/zhiboroom?userid="+openid+"&username="+nickname+"&headimgurl="+headimgurl);
+						if(state == 3) {//肌电图教学系列
+                    	res.redirect("/haishen/video?userid="+openid+"&username="+nickname+"&expertid=666&headimgurl="+headimgurl);
 						}
 					}
 					

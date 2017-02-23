@@ -67,7 +67,7 @@
                         <div id="onlinecount" style="font-size:130%;"></div>
 						
                     </summary>
-                    <ul class="list" id="message" style="display:none;">
+                    <ul class="list" id="message">
                         <li>
                             <div class="justify-content">
                                 <p style="font-size:130%">Welcome</p>
@@ -75,7 +75,7 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="list" id="qr" style="display:none;">
+                    <ul class="list" id="qr">
                         <li>
                             <div class="justify-content" >
                                 <img src="/assets/app/img/qr.jpg" alt="" style="width:156px;height:auto;display:block;margin:0 auto;">
@@ -92,7 +92,7 @@
             </div>
             </article>
             <footer>
-                <div class="input-box" style="display:none;">
+                <div class="input-box" id="input-box">
                     <i class="color-placeholder icon icon-chatdot-fill"></i>
                     <input type="text" placeholder="我来说两句" maxlength="140" name="content" id="content"  style="font-size:130%;height:130%">
                     <button class="radius4" onclick="submit_msg();">发送</button>
@@ -109,14 +109,16 @@
 </body>
 	<script>
 		var strHref = window.document.location.href; 
-		var key = strHref.indexOf("beijingroom?");
+		var key = strHref.indexOf("zhiboroom?");
 		function MyAutoRun()
 		{
 			if(key != -1){
 				document.getElementById('high').style.display = 'block';
 				document.getElementById('low').style.display = 'block';
-				
 				document.getElementById('introduction').style.display = 'block';
+				document.getElementById('message').style.display = 'none';
+				document.getElementById('qr').style.display = 'none';
+				document.getElementById('input-box').style.display = 'none';
 				} else {
 					console.log(key);
 					}
