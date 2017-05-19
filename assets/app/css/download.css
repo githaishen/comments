@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ margin:0; padding:0;}
+body{margin:0 auto; background-color:#09C;}
+.top{background-color:#999; height:70px; line-height:70px; font-size:12px; color:#FFF; font-family:"黑体";filter:alpha(opacity=80);  /* ie 有效*/
+	-moz-opacity:0.8; /* Firefox  有效*/
+	opacity: 0.8; /* 通用，其他浏览器  有效*/}
+.top img{ vertical-align:middle;}
+.banner img{width:100%;}
+.ctx{ color:#FFF; width:100%;margin:20px auto;}
+.download{ text-align:center;}
+.download img{ padding:10px 0;}

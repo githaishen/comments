@@ -204,6 +204,12 @@ router.get('/haishen/wall', function (req, res) {
     res.render("wall");
 });
 
+router.get('/haishen/lyzk', function (req, res) {
+
+    // 渲染页面数据(见views/lyzk.hbs)下载良医智库
+    res.render("lyzk");
+});
+
 router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
     var userid = req.query.userid;
