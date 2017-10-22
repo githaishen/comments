@@ -210,11 +210,7 @@ router.get('/haishen/lyzk', function (req, res) {
     res.render("lyzk");
 });
 
-router.get('/haishen/download', function (req, res) {
 
-    // 渲染页面数据(见views/download.hbs)资料链接下载
-    res.render("download");
-});
 
 router.get('/haishen/list', function (req, res) {
     var username = req.query.username;
